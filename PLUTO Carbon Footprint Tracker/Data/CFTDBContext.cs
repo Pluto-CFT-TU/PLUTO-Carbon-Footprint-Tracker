@@ -72,9 +72,9 @@ namespace PLUTO_Carbon_Footprint_Tracker.Data
                 .IsRequired(false);
 
             modelBuilder.Entity<ActivityType>().HasData(
-    new ActivityType { Id = 1, Name = "Transport" },
-    new ActivityType { Id = 2, Name = "Food" },
-    new ActivityType { Id = 3, Name = "Energy" }
+                new ActivityType { Id = 1, Name = "Transport" },
+                new ActivityType { Id = 2, Name = "Food" },
+                new ActivityType { Id = 3, Name = "Energy" }
 );
 
             modelBuilder.Entity<Activity>().HasData(
@@ -85,4 +85,3 @@ namespace PLUTO_Carbon_Footprint_Tracker.Data
         }
     }
 }
-

@@ -2,20 +2,17 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
-using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using PLUTO_Carbon_Footprint_Tracker.Data;
 
 #nullable disable
 
-namespace PLUTO_Carbon_Footprint_Tracker.Data.Migrations
+namespace PLUTO_Carbon_Footprint_Tracker.Migrations
 {
     [DbContext(typeof(CFTDBContext))]
-    [Migration("20260412150146_SeedDataUpdate-Database")]
-    partial class SeedDataUpdateDatabase
+    partial class CFTDBContextModelSnapshot : ModelSnapshot
     {
-        /// <inheritdoc />
-        protected override void BuildTargetModel(ModelBuilder modelBuilder)
+        protected override void BuildModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder.HasAnnotation("ProductVersion", "8.0.25");

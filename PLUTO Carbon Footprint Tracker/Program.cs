@@ -1,5 +1,6 @@
 ﻿using Auth0.AspNetCore.Authentication;
 using PLUTO_Carbon_Footprint_Tracker.Data;
+using PLUTO_Carbon_Footprint_Tracker.Services;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -8,6 +9,7 @@ builder.Services.AddRazorPages();
 
 // Register database context with the framework - this needs to be added manually
 builder.Services.AddDbContext<CFTDBContext>();
+builder.Services.AddScoped<SyncUserDataService>();
 builder.Services
 // -------------------------------------------------------------
 // AddAuth0WebAppAuthentication
@@ -93,8 +95,6 @@ app.UseAuthentication();
 //   → Users can log in, but authorization rules won't run
 //   → All pages behave as if they are public
 // -----------------------------------------------------------------------------
-app.UseAuthorization();
-
 app.UseAuthorization();
 
 app.MapRazorPages();
