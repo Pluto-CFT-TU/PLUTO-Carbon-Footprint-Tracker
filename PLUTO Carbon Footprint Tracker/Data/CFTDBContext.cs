@@ -70,6 +70,18 @@ namespace PLUTO_Carbon_Footprint_Tracker.Data
                 .WithMany()
                 .HasForeignKey(t => t.ActivityTypeId)
                 .IsRequired(false);
+
+            modelBuilder.Entity<ActivityType>().HasData(
+    new ActivityType { Id = 1, Name = "Transport" },
+    new ActivityType { Id = 2, Name = "Food" },
+    new ActivityType { Id = 3, Name = "Energy" }
+);
+
+            modelBuilder.Entity<Activity>().HasData(
+                new Activity { Id = 1, Name = "Car Travel", Unit = "miles", EmissionFactor = 0.411m, ActivityTypeId = 1 },
+                new Activity { Id = 2, Name = "Bus Travel", Unit = "miles", EmissionFactor = 0.105m, ActivityTypeId = 1 },
+                new Activity { Id = 3, Name = "Beef Meal", Unit = "meals", EmissionFactor = 2.5m, ActivityTypeId = 2 }
+            );
         }
     }
 }

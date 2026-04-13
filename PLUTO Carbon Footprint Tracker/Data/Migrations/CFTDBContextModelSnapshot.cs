@@ -45,6 +45,35 @@ namespace PLUTO_Carbon_Footprint_Tracker.Data.Migrations
                     b.HasIndex("ActivityTypeId");
 
                     b.ToTable("Activities");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = 1,
+                            ActivityTypeId = 1,
+                            EmissionFactor = 0.411m,
+                            IsActive = true,
+                            Name = "Car Travel",
+                            Unit = "miles"
+                        },
+                        new
+                        {
+                            Id = 2,
+                            ActivityTypeId = 1,
+                            EmissionFactor = 0.105m,
+                            IsActive = true,
+                            Name = "Bus Travel",
+                            Unit = "miles"
+                        },
+                        new
+                        {
+                            Id = 3,
+                            ActivityTypeId = 2,
+                            EmissionFactor = 2.5m,
+                            IsActive = true,
+                            Name = "Beef Meal",
+                            Unit = "meals"
+                        });
                 });
 
             modelBuilder.Entity("PLUTO_Carbon_Footprint_Tracker.Data.ActivityType", b =>
@@ -63,6 +92,23 @@ namespace PLUTO_Carbon_Footprint_Tracker.Data.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("ActivityTypes");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = 1,
+                            Name = "Transport"
+                        },
+                        new
+                        {
+                            Id = 2,
+                            Name = "Food"
+                        },
+                        new
+                        {
+                            Id = 3,
+                            Name = "Energy"
+                        });
                 });
 
             modelBuilder.Entity("PLUTO_Carbon_Footprint_Tracker.Data.EmissionEntry", b =>
