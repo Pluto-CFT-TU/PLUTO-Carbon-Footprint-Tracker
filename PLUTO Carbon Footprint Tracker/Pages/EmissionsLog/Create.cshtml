@@ -2,61 +2,37 @@
 @model PLUTO_Carbon_Footprint_Tracker.Pages.EmissionsLog.CreateModel
 
 @{
-    ViewData["Title"] = "Create";
+    ViewData["Title"] = "Confirm Activity";
 }
 
-<h1>Create</h1>
+<h1>Confirm Activity</h1>
 
-<h4>EmissionEntry</h4>
-<hr />
-<div class="row">
-    <div class="col-md-4">
-        <form method="post">
-            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-            <div class="form-group">
-                <label asp-for="EmissionEntry.UserId" class="control-label"></label>
-                <select asp-for="EmissionEntry.UserId" class ="form-control" asp-items="ViewBag.UserId" ></select>
-            </div>
-            <div class="form-group">
-                <label asp-for="EmissionEntry.ActivityId" class="control-label"></label>
-                <select asp-for="EmissionEntry.ActivityId" class ="form-control" asp-items="ViewBag.ActivityId" ></select>
-            </div>
-            <div class="form-group">
-                <label asp-for="EmissionEntry.Quantity" class="control-label"></label>
-                <input asp-for="EmissionEntry.Quantity" class="form-control" />
-                <span asp-validation-for="EmissionEntry.Quantity" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="EmissionEntry.CarbonKg" class="control-label"></label>
-                <input asp-for="EmissionEntry.CarbonKg" class="form-control" />
-                <span asp-validation-for="EmissionEntry.CarbonKg" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="EmissionEntry.EntryDate" class="control-label"></label>
-                <input asp-for="EmissionEntry.EntryDate" class="form-control" />
-                <span asp-validation-for="EmissionEntry.EntryDate" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="EmissionEntry.Notes" class="control-label"></label>
-                <input asp-for="EmissionEntry.Notes" class="form-control" />
-                <span asp-validation-for="EmissionEntry.Notes" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="EmissionEntry.CreatedAt" class="control-label"></label>
-                <input asp-for="EmissionEntry.CreatedAt" class="form-control" />
-                <span asp-validation-for="EmissionEntry.CreatedAt" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <input type="submit" value="Create" class="btn btn-primary" />
-            </div>
-        </form>
+@if (Model.Activity != null)
+{
+    <div class="card mb-3">
+        <div class="card-body">
+            <p><strong>Category:</strong> @Model.Activity.ActivityType.Name</p>
+            <p><strong>Activity:</strong> @Model.Activity.Name</p>
+            <p><strong>Factor:</strong> @Model.Activity.EmissionFactor per @Model.Activity.Unit</p>
+        </div>
     </div>
-</div>
+}
 
-<div>
-    <a asp-page="Index">Back to List</a>
-</div>
+<form method="post">
+    <input type="hidden" asp-for="ActivityId" />
+    <input type="hidden" asp-for="SelectedDate" />
+
+    <div class="mb-3">
+        <label asp-for="Quantity" class="form-label">Quantity (@Model.Activity?.Unit)</label>
+        <input asp-for="Quantity" class="form-control" />
+        <span asp-validation-for="Quantity" class="text-danger"></span>
+    </div>
+
+    <button type="submit" class="btn btn-success">Confirm</button>
+    <a asp-page="./AddActivity" asp-route-selectedDate="@Model.SelectedDate.ToString("yyyy-MM-dd")"
+       class="btn btn-secondary">Back</a>
+</form>
 
 @section Scripts {
-    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+    <partial name="_ValidationScriptsPartial" />
 }

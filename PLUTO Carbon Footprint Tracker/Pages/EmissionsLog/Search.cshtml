@@ -1,0 +1,60 @@
+﻿@page
+@model PLUTO_Carbon_Footprint_Tracker.Pages.EmissionsLog.SearchModel
+
+@{
+    ViewData["Title"] = "Select Activity";
+}
+
+<h1>Select Activity</h1>
+
+<form method="get" class="mb-3">
+    <input type="hidden" name="selectedDate" value="@Model.SelectedDate.ToString(" yyyy-MM-dd")" />
+
+    <div class="mb-3">
+        <label for="searchTerm" class="form-label">Search</label>
+        <input type="text" id="searchTerm" name="searchTerm" value="@Model.SearchTerm"
+               class="form-control" placeholder="Search activity or category..." />
+    </div>
+
+    <button type="submit" class="btn btn-primary">Search</button>
+    <a asp-page="./Index" asp-route-selectedDate="@Model.SelectedDate.ToString(" yyyy-MM-dd")"
+       class="btn btn-secondary">Back</a>
+</form>
+
+@if (Model.ActivityItems.Any())
+{
+<table class="table">
+    <thead>
+        <tr>
+            <th>Category</th>
+            <th>Activity</th>
+            <th>Unit</th>
+            <th>Factor</th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model.ActivityItems)
+        {
+        <tr>
+            <td>@item.ActivityTypeName</td>
+            <td>@item.ActivityName</td>
+            <td>@item.Unit</td>
+            <td>@item.EmissionFactor</td>
+            <td>
+                <a asp-page="./Create"
+                   asp-route-activityId="@item.Id"
+                   asp-route-selectedDate="@Model.SelectedDate.ToString(" yyyy-MM-dd")"
+                   class="btn btn-success">
+                    Select
+                </a>
+            </td>
+        </tr>
+        }
+    </tbody>
+</table>
+}
+else
+{
+<p>No matching activities found.</p>
+}

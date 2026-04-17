@@ -8,7 +8,6 @@
         public decimal Quantity { get; set; }
         public decimal CarbonKg { get; set; }
         public DateTime EntryDate { get; set; }
-        public string? Notes { get; set; }
         public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
 
         public User User { get; set; } = null!;

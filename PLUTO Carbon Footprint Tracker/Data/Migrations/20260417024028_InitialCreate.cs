@@ -5,7 +5,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 #pragma warning disable CA1814 // Prefer jagged arrays over multidimensional
 
-namespace PLUTO_Carbon_Footprint_Tracker.Migrations
+namespace PLUTO_Carbon_Footprint_Tracker.Data.Migrations
 {
     /// <inheritdoc />
     public partial class InitialCreate : Migration
@@ -171,7 +171,6 @@ namespace PLUTO_Carbon_Footprint_Tracker.Migrations
                     Quantity = table.Column<decimal>(type: "TEXT", nullable: false),
                     CarbonKg = table.Column<decimal>(type: "TEXT", nullable: false),
                     EntryDate = table.Column<DateTime>(type: "TEXT", nullable: false),
-                    Notes = table.Column<string>(type: "TEXT", nullable: true),
                     CreatedAt = table.Column<DateTime>(type: "TEXT", nullable: false)
                 },
                 constraints: table =>

@@ -2,71 +2,63 @@
 @model PLUTO_Carbon_Footprint_Tracker.Pages.EmissionsLog.IndexModel
 
 @{
-    ViewData["Title"] = "Index";
+    ViewData["Title"] = "Emission Log";
 }
 
-<h1>Index</h1>
+<h1>Emission Log</h1>
+
+<form method="get" class="mb-3">
+    <label for="selectedDate" class="form-label">Date</label>
+    <input type="date" id="selectedDate" name="selectedDate"
+        value="@Model.SelectedDate.ToString("yyyy-MM-dd")" class="form-control" />
+    <button type="submit" class="btn btn-secondary mt-2">Load</button>
+</form>
+
+<div class="card mb-3">
+    <div class="card-body">
+        <h4>Total for @Model.SelectedDate.ToString("dd MMM yyyy")</h4>
+        <p><strong>@Model.TotalCarbonKg.ToString("0.###") kg</strong></p>
+    </div>
+</div>
 
 <p>
-    <a asp-page="Create">Create New</a>
+    <a asp-page="./Search" asp-route-selectedDate="@Model.SelectedDate.ToString("yyyy-MM-dd")"
+    class="btn btn-success">Add New</a>
 </p>
-<table class="table">
-    <thead>
-        <tr>
-            <th>
-                @Html.DisplayNameFor(model => model.EmissionEntry[0].Quantity)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.EmissionEntry[0].CarbonKg)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.EmissionEntry[0].EntryDate)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.EmissionEntry[0].Notes)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.EmissionEntry[0].CreatedAt)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.EmissionEntry[0].User)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.EmissionEntry[0].Activity)
-            </th>
-            <th></th>
-        </tr>
-    </thead>
-    <tbody>
-@foreach (var item in Model.EmissionEntry) {
-        <tr>
-            <td>
-                @Html.DisplayFor(modelItem => item.Quantity)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.CarbonKg)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.EntryDate)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Notes)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.CreatedAt)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.User.Id)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Activity.Id)
-            </td>
-            <td>
-                <a asp-page="./Edit" asp-route-id="@item.Id">Edit</a> |
-                <a asp-page="./Details" asp-route-id="@item.Id">Details</a> |
-                <a asp-page="./Delete" asp-route-id="@item.Id">Delete</a>
-            </td>
-        </tr>
+
+@if (Model.GroupedEntries.Any())
+{
+    @foreach (var group in Model.GroupedEntries)
+    {
+        <h3>@group.Key</h3>
+
+        <table class="table">
+            <thead>
+                <tr>
+                    <th>Activity</th>
+                    <th>Quantity</th>
+                    <th>Carbon</th>
+                </tr>
+            </thead>
+            <tbody>
+            @foreach (var entry in group.Value)
+            {
+                <tr>
+                    <td>@entry.Activity.Name</td>
+                    <td>@entry.Quantity @entry.Activity.Unit</td>
+                    <td>@entry.CarbonKg.ToString("0.###") kg</td>
+                    <td>
+                        <a asp-page="./Edit" asp-route-id="@entry.Activity">Edit</a> |
+                        <a asp-page="./Details" asp-route-id="@entry.Activity">Details</a> |
+                        <a asp-page="./Delete" asp-route-id="@entry.Activity">Delete</a>
+                    </td>
+                </tr>
+            }
+            </tbody>
+        </table>
+    }
 }
-    </tbody>
-</table>
+else
+{
+    <p>No entries found for this date.</p>
+}

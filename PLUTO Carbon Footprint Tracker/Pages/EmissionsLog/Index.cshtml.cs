@@ -1,30 +1,48 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.EntityFrameworkCore;
 using PLUTO_Carbon_Footprint_Tracker.Data;
+using PLUTO_Carbon_Footprint_Tracker.Services;
 
 namespace PLUTO_Carbon_Footprint_Tracker.Pages.EmissionsLog
 {
     public class IndexModel : PageModel
     {
-        private readonly PLUTO_Carbon_Footprint_Tracker.Data.CFTDBContext _context;
+        private readonly CFTDBContext _context;
+        private readonly SyncUserDataService _syncUserDataService;
 
-        public IndexModel(PLUTO_Carbon_Footprint_Tracker.Data.CFTDBContext context)
+        public IndexModel(CFTDBContext context, SyncUserDataService syncUserDataService)
         {
             _context = context;
+            _syncUserDataService = syncUserDataService;
         }
 
-        public IList<EmissionEntry> EmissionEntry { get;set; } = default!;
+        public DateTime SelectedDate { get; set; }
+        public decimal TotalCarbonKg { get; set; }
+        public Dictionary<string, List<EmissionEntry>> GroupedEntries { get; set; } = new();
 
-        public async Task OnGetAsync()
+        public async Task<IActionResult> OnGetAsync(DateTime? selectedDate)
         {
-            EmissionEntry = await _context.EmissionEntries
-                .Include(e => e.Activity)
-                .Include(e => e.User).ToListAsync();
+            var user = await _syncUserDataService.EnsureUserExistsAsync(User);
+            if (user == null)
+            {
+                return NotFound();
+            }
+
+            SelectedDate = (selectedDate ?? DateTime.UtcNow.Date).Date;
+
+            var entries = await _context.EmissionEntries.Include(e => e.Activity)
+                .ThenInclude(a => a.ActivityType)
+                .Where(e => e.UserId == user.Id && e.EntryDate == SelectedDate)
+                .OrderBy(e => e.Activity.ActivityType.Name)
+                .ThenByDescending(e => e.CreatedAt).ToListAsync();
+
+            TotalCarbonKg = entries.Sum(e => e.CarbonKg);
+
+            GroupedEntries = entries.GroupBy(e => e.Activity.ActivityType.Name)
+                .ToDictionary(g => g.Key, g => g.ToList());
+
+            return Page();
         }
     }
 }

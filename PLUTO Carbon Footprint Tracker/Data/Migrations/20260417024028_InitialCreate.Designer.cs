@@ -2,17 +2,20 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using PLUTO_Carbon_Footprint_Tracker.Data;
 
 #nullable disable
 
-namespace PLUTO_Carbon_Footprint_Tracker.Migrations
+namespace PLUTO_Carbon_Footprint_Tracker.Data.Migrations
 {
     [DbContext(typeof(CFTDBContext))]
-    partial class CFTDBContextModelSnapshot : ModelSnapshot
+    [Migration("20260417024028_InitialCreate")]
+    partial class InitialCreate
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder.HasAnnotation("ProductVersion", "8.0.25");
@@ -127,9 +130,6 @@ namespace PLUTO_Carbon_Footprint_Tracker.Migrations
                         .HasColumnType("TEXT");
 
                     b.Property<DateTime>("EntryDate")
-                        .HasColumnType("TEXT");
-
-                    b.Property<string>("Notes")
                         .HasColumnType("TEXT");
 
                     b.Property<decimal>("Quantity")

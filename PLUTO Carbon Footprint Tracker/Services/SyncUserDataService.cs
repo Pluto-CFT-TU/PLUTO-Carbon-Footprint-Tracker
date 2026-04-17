@@ -66,7 +66,7 @@ namespace PLUTO_Carbon_Footprint_Tracker.Services
             }
             else
             {
-                user.Email = email; mjhn
+                user.Email = email;
                 user.Username = username;
                 user.UpdatedAt = DateTime.UtcNow;
                 _logger.LogInformation("Updating existing user.");
