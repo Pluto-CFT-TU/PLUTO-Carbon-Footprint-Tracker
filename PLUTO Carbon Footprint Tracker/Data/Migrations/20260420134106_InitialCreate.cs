@@ -98,9 +98,7 @@ namespace PLUTO_Carbon_Footprint_Tracker.Data.Migrations
                     ActivityTypeId = table.Column<int>(type: "INTEGER", nullable: true),
                     Title = table.Column<string>(type: "TEXT", nullable: false),
                     Content = table.Column<string>(type: "TEXT", nullable: false),
-                    VideoUrl = table.Column<string>(type: "TEXT", nullable: true),
-                    IsGeneral = table.Column<bool>(type: "INTEGER", nullable: false),
-                    IsPublished = table.Column<bool>(type: "INTEGER", nullable: false)
+                    VideoUrl = table.Column<string>(type: "TEXT", nullable: true)
                 },
                 constraints: table =>
                 {

@@ -11,7 +11,7 @@ using PLUTO_Carbon_Footprint_Tracker.Data;
 namespace PLUTO_Carbon_Footprint_Tracker.Data.Migrations
 {
     [DbContext(typeof(CFTDBContext))]
-    [Migration("20260417024028_InitialCreate")]
+    [Migration("20260420134106_InitialCreate")]
     partial class InitialCreate
     {
         /// <inheritdoc />
@@ -259,12 +259,6 @@ namespace PLUTO_Carbon_Footprint_Tracker.Data.Migrations
                     b.Property<string>("Content")
                         .IsRequired()
                         .HasColumnType("TEXT");
-
-                    b.Property<bool>("IsGeneral")
-                        .HasColumnType("INTEGER");
-
-                    b.Property<bool>("IsPublished")
-                        .HasColumnType("INTEGER");
 
                     b.Property<string>("Title")
                         .IsRequired()

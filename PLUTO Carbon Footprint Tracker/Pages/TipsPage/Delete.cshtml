@@ -1,0 +1,46 @@
+﻿@page
+@model PLUTO_Carbon_Footprint_Tracker.Pages.TipsPage.DeleteModel
+
+@{
+    ViewData["Title"] = "Delete";
+}
+
+<h1>Delete</h1>
+
+<h3>Are you sure you want to delete this?</h3>
+<div>
+    <h4>Tips</h4>
+    <hr />
+    <dl class="row">
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.Tips.Title)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.Tips.Title)
+        </dd>
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.Tips.Content)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.Tips.Content)
+        </dd>
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.Tips.VideoUrl)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.Tips.VideoUrl)
+        </dd>
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.Tips.ActivityType)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.Tips.ActivityType.Id)
+        </dd>
+    </dl>
+    
+    <form method="post">
+        <input type="hidden" asp-for="Tips.Id" />
+        <input type="submit" value="Delete" class="btn btn-danger" /> |
+        <a asp-page="./Index">Back to List</a>
+    </form>
+</div>

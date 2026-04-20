@@ -1,0 +1,38 @@
+﻿@page
+@model PLUTO_Carbon_Footprint_Tracker.Pages.TipsPage.IndexModel
+
+@{
+    ViewData["Title"] = "Index";
+}
+
+<h1>Tips</h1>
+
+@if (!String.IsNullOrEmpty(Model.HighestActivityType))
+{
+    <p>Your Highest Emission type is: <strong>@Model.HighestActivityType</strong></p>
+}
+@if (Model.PersonalisedTips.Any())
+{
+    <p>Here are some personalised tips to help you reduce your carbon footprint:</p>
+    <h2>Personalised Tips</h2>
+    <div class="card mb-3">
+        @foreach (var tip in Model.PersonalisedTips)
+        {
+            <div class="card-body">
+                <h4>@tip.Title</h4>
+                <a asp-page="./Details" asp-route-id="@tip.Id" class="btn btn-primary">View Details</a>"
+            </div>
+        }
+}
+</div>
+<h2>General Tips</h2>
+<p>Here are some general tips to help you reduce your carbon footprint:</p>
+<div class="card mb-3">
+        @foreach (var tip in Model.GeneralTips)
+        {
+            <div class="card-body">
+                <h4>@tip.Title</h4>
+                <a asp-page="./Details" asp-route-id="@tip.Id" class="btn btn-primary">View Details</a>"
+            </div>
+        }
+</div>

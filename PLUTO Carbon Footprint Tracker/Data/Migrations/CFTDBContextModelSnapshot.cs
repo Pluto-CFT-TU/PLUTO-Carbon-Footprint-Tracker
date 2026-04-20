@@ -257,12 +257,6 @@ namespace PLUTO_Carbon_Footprint_Tracker.Data.Migrations
                         .IsRequired()
                         .HasColumnType("TEXT");
 
-                    b.Property<bool>("IsGeneral")
-                        .HasColumnType("INTEGER");
-
-                    b.Property<bool>("IsPublished")
-                        .HasColumnType("INTEGER");
-
                     b.Property<string>("Title")
                         .IsRequired()
                         .HasColumnType("TEXT");
