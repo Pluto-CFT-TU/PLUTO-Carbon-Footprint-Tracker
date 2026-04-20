@@ -11,7 +11,7 @@ using PLUTO_Carbon_Footprint_Tracker.Data;
 namespace PLUTO_Carbon_Footprint_Tracker.Data.Migrations
 {
     [DbContext(typeof(CFTDBContext))]
-    [Migration("20260420134106_InitialCreate")]
+    [Migration("20260420182134_InitialCreate")]
     partial class InitialCreate
     {
         /// <inheritdoc />
@@ -272,6 +272,28 @@ namespace PLUTO_Carbon_Footprint_Tracker.Data.Migrations
                     b.HasIndex("ActivityTypeId");
 
                     b.ToTable("Tips");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = 1,
+                            ActivityTypeId = 1,
+                            Content = "Try walking, cycling, or public transport for shorter journeys to reduce travel emissions.",
+                            Title = "Reduce Car Journeys"
+                        },
+                        new
+                        {
+                            Id = 2,
+                            ActivityTypeId = 3,
+                            Content = "Turn off appliances when not in use and reduce heating where possible to cut energy consumption.",
+                            Title = "Save Home Energy"
+                        },
+                        new
+                        {
+                            Id = 3,
+                            Content = "Making small changes to transport, food, and energy habits can reduce your carbon footprint over time.",
+                            Title = "Start Small"
+                        });
                 });
 
             modelBuilder.Entity("PLUTO_Carbon_Footprint_Tracker.Data.User", b =>

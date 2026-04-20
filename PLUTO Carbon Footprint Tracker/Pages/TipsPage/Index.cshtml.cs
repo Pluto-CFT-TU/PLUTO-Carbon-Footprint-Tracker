@@ -1,12 +1,7 @@
-﻿using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.RazorPages;
+﻿using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.EntityFrameworkCore;
 using PLUTO_Carbon_Footprint_Tracker.Data;
 using PLUTO_Carbon_Footprint_Tracker.Services;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 
 namespace PLUTO_Carbon_Footprint_Tracker.Pages.TipsPage
 {
@@ -14,17 +9,17 @@ namespace PLUTO_Carbon_Footprint_Tracker.Pages.TipsPage
     {
         private readonly CFTDBContext _context;
         private readonly SyncUserDataService _syncUserDataService;
+
         public IndexModel(CFTDBContext context, SyncUserDataService syncUserDataService)
         {
             _context = context;
             _syncUserDataService = syncUserDataService;
         }
 
-        public IList<Tips> PersonalisedTips { get; set; } = default!;
-        public IList<Tips> GeneralTips { get; set; } = default!;
-        // USed to descern which activity type the user logs more
-        // so more tips related to that activity type can be displayed
-        public string? HighestActivityType { get; set; }
+        public IList<Tips> RecommendedTips { get; set; } = new List<Tips>();
+        public IList<Tips> GeneralTips { get; set; } = new List<Tips>();
+
+        public string? HighestCarbonActivityType { get; set; }
 
         public async Task OnGetAsync()
         {
@@ -33,20 +28,49 @@ namespace PLUTO_Carbon_Footprint_Tracker.Pages.TipsPage
             {
                 return;
             }
-            var HighestActivity = await _context.EmissionEntries.Where(e => e.UserId == user.Id)
+
+            // Load the user's entries first
+            var userEntries = await _context.EmissionEntries
+                .Where(e => e.UserId == user.Id)
                 .Include(e => e.Activity)
                 .ThenInclude(a => a.ActivityType)
-                .GroupBy(e => e.Activity.ActivityType.Name)
-                .Select(g => new { ActivityTypeName = g.Key, TotalCarbon = g.Sum(e => e.CarbonKg) })
-                .OrderByDescending(g => g.TotalCarbon)
-                .FirstOrDefaultAsync();
+                .ToListAsync();
 
-            if (HighestActivity != null)
+            // Find the activity type with the highest total carbon
+            var highestCarbonActivity = userEntries
+                .GroupBy(e => e.Activity.ActivityType.Name)
+                .Select(g => new
+                {
+                    ActivityTypeName = g.Key,
+                    TotalCarbon = g.Sum(e => e.CarbonKg)
+                })
+                .OrderByDescending(g => g.TotalCarbon)
+                .FirstOrDefault();
+
+            List<int> recommendedIds = new();
+
+            if (highestCarbonActivity != null)
             {
-                HighestActivityType = HighestActivity.ActivityTypeName;
-                PersonalisedTips = await _context.Tips.Where(t => t.ActivityType.Name == HighestActivityType).ToListAsync();
+                HighestCarbonActivityType = highestCarbonActivity.ActivityTypeName;
+
+                RecommendedTips = await _context.Tips
+                    .Include(t => t.ActivityType)
+                    .Where(t => t.ActivityType != null &&
+                                t.ActivityType.Name == HighestCarbonActivityType)
+                    .OrderBy(t => t.Title)
+                    .Take(5)
+                    .ToListAsync();
+
+                recommendedIds = RecommendedTips.Select(t => t.Id).ToList();
             }
-            GeneralTips = await _context.Tips.Where(t => t.ActivityType == null).ToListAsync();
+
+            // Load more tips not already shown
+            GeneralTips = await _context.Tips
+                .Include(t => t.ActivityType)
+                .Where(t => !recommendedIds.Contains(t.Id))
+                .OrderBy(t => t.Title)
+                .Take(4)
+                .ToListAsync();
         }
     }
 }

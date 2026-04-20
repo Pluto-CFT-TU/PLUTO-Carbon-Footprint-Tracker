@@ -199,6 +199,11 @@ namespace PLUTO_Carbon_Footprint_Tracker.Data.Migrations
                 });
 
             migrationBuilder.InsertData(
+                table: "Tips",
+                columns: new[] { "Id", "ActivityTypeId", "Content", "Title", "VideoUrl" },
+                values: new object[] { 3, null, "Making small changes to transport, food, and energy habits can reduce your carbon footprint over time.", "Start Small", null });
+
+            migrationBuilder.InsertData(
                 table: "Activities",
                 columns: new[] { "Id", "ActivityTypeId", "EmissionFactor", "IsActive", "Name", "Unit" },
                 values: new object[,]
@@ -206,6 +211,15 @@ namespace PLUTO_Carbon_Footprint_Tracker.Data.Migrations
                     { 1, 1, 0.411m, true, "Car Travel", "miles" },
                     { 2, 1, 0.105m, true, "Bus Travel", "miles" },
                     { 3, 2, 2.5m, true, "Beef Meal", "meals" }
+                });
+
+            migrationBuilder.InsertData(
+                table: "Tips",
+                columns: new[] { "Id", "ActivityTypeId", "Content", "Title", "VideoUrl" },
+                values: new object[,]
+                {
+                    { 1, 1, "Try walking, cycling, or public transport for shorter journeys to reduce travel emissions.", "Reduce Car Journeys", null },
+                    { 2, 3, "Turn off appliances when not in use and reduce heating where possible to cut energy consumption.", "Save Home Energy", null }
                 });
 
             migrationBuilder.CreateIndex(
