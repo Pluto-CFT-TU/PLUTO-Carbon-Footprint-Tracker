@@ -1,21 +1,20 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.EntityFrameworkCore;
 using PLUTO_Carbon_Footprint_Tracker.Data;
+using PLUTO_Carbon_Footprint_Tracker.Services;
 
 namespace PLUTO_Carbon_Footprint_Tracker.Pages.EmissionsLog
 {
     public class DeleteModel : PageModel
     {
-        private readonly PLUTO_Carbon_Footprint_Tracker.Data.CFTDBContext _context;
+        private readonly CFTDBContext _context;
+        private readonly SyncUserDataService _syncUserDataService;
 
-        public DeleteModel(PLUTO_Carbon_Footprint_Tracker.Data.CFTDBContext context)
+        public DeleteModel(CFTDBContext context, SyncUserDataService syncUserDataService)
         {
             _context = context;
+            _syncUserDataService = syncUserDataService;
         }
 
         [BindProperty]
@@ -28,16 +27,22 @@ namespace PLUTO_Carbon_Footprint_Tracker.Pages.EmissionsLog
                 return NotFound();
             }
 
-            var emissionentry = await _context.EmissionEntries.FirstOrDefaultAsync(m => m.Id == id);
+            var user = await _syncUserDataService.EnsureUserExistsAsync(User);
+            if (user == null)
+            {
+                return NotFound();
+            }
+
+            var emissionentry = await _context.EmissionEntries.Include(e => e.Activity)
+                .ThenInclude(a => a.ActivityType)
+                .FirstOrDefaultAsync(e => e.Id == id && e.UserId == user.Id);
 
             if (emissionentry == null)
             {
                 return NotFound();
             }
-            else
-            {
-                EmissionEntry = emissionentry;
-            }
+
+            EmissionEntry = emissionentry;
             return Page();
         }
 
@@ -48,15 +53,26 @@ namespace PLUTO_Carbon_Footprint_Tracker.Pages.EmissionsLog
                 return NotFound();
             }
 
-            var emissionentry = await _context.EmissionEntries.FindAsync(id);
-            if (emissionentry != null)
+            var user = await _syncUserDataService.EnsureUserExistsAsync(User);
+            if (user == null)
             {
-                EmissionEntry = emissionentry;
-                _context.EmissionEntries.Remove(EmissionEntry);
-                await _context.SaveChangesAsync();
+                return NotFound();
             }
 
-            return RedirectToPage("./Index");
+            var entry = await _context.EmissionEntries
+                .FirstOrDefaultAsync(e => e.Id == id && e.UserId == user.Id);
+
+            if (entry == null)
+            {
+                return NotFound();
+            }
+
+            var entryDate = entry.EntryDate.Date;
+
+            _context.EmissionEntries.Remove(entry);
+            await _context.SaveChangesAsync();
+
+            return RedirectToPage("./Index", new { selectedDate = entryDate.ToString("yyyy-MM-dd") });
         }
     }
 }

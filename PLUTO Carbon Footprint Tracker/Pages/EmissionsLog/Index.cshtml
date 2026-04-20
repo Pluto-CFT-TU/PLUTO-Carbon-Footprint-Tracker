@@ -47,11 +47,17 @@
                     <td>@entry.Activity.Name</td>
                     <td>@entry.Quantity @entry.Activity.Unit</td>
                     <td>@entry.CarbonKg.ToString("0.###") kg</td>
-                    <td>
-                        <a asp-page="./Edit" asp-route-id="@entry.Activity">Edit</a> |
-                        <a asp-page="./Details" asp-route-id="@entry.Activity">Details</a> |
-                        <a asp-page="./Delete" asp-route-id="@entry.Activity">Delete</a>
-                    </td>
+                        <td>
+                            <a asp-page="./Edit" asp-route-id="@entry.Id"
+                               asp-route-selectedDate="@Model.SelectedDate.ToString("yyyy-MM-dd")"
+                               class="btn btn-sm btn-primary">Edit</a>
+                            <a asp-page="./Details" asp-route-id="@entry.Id"
+                               asp-route-selectedDate="@Model.SelectedDate.ToString("yyyy-MM-dd")"
+                               class="btn btn-sm btn-info">View</a>
+                            <a asp-page="./Delete" asp-route-id="@entry.Id"
+                            asp-route-selectedDate="@Model.SelectedDate.ToString("yyyy-MM-dd")"
+                            class="btn btn-sm btn-danger">Delete</a>
+                        </td>
                 </tr>
             }
             </tbody>

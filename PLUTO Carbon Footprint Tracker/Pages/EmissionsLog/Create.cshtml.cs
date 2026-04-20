@@ -28,10 +28,7 @@ namespace PLUTO_Carbon_Footprint_Tracker.Pages.EmissionsLog
         [BindProperty]
         public DateTime SelectedDate { get; set; }
 
-        [BindProperty]
-        public string? Notes { get; set; }
-
-        public decimal PreviewCarbonKg { get; set; }
+        public decimal CarbonKg { get; set; }
 
         public async Task<IActionResult> OnGetAsync(int? activityId, DateTime? selectedDate)
         {
@@ -40,8 +37,7 @@ namespace PLUTO_Carbon_Footprint_Tracker.Pages.EmissionsLog
                 return NotFound();
             }
 
-            Activity = await _context.Activities
-                .Include(a => a.ActivityType)
+            Activity = await _context.Activities.Include(a => a.ActivityType)
                 .FirstOrDefaultAsync(a => a.Id == activityId && a.IsActive);
 
             if (Activity == null)
@@ -57,8 +53,7 @@ namespace PLUTO_Carbon_Footprint_Tracker.Pages.EmissionsLog
 
         public async Task<IActionResult> OnPostAsync()
         {
-            Activity = await _context.Activities
-                .Include(a => a.ActivityType)
+            Activity = await _context.Activities.Include(a => a.ActivityType)
                 .FirstOrDefaultAsync(a => a.Id == ActivityId && a.IsActive);
 
             if (Activity == null)
@@ -75,17 +70,17 @@ namespace PLUTO_Carbon_Footprint_Tracker.Pages.EmissionsLog
             var user = await _syncUserDataService.EnsureUserExistsAsync(User);
             if (user == null)
             {
-                return Challenge();
+                return NotFound();
             }
 
-            PreviewCarbonKg = Quantity * Activity.EmissionFactor;
+            CarbonKg = Quantity * Activity.EmissionFactor;
 
             var entry = new EmissionEntry
             {
                 UserId = user.Id,
                 ActivityId = Activity.Id,
                 Quantity = Quantity,
-                CarbonKg = PreviewCarbonKg,
+                CarbonKg = CarbonKg,
                 EntryDate = SelectedDate.Date,
                 CreatedAt = DateTime.UtcNow
             };
