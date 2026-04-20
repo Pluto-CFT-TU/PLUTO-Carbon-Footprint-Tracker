@@ -82,6 +82,32 @@ namespace PLUTO_Carbon_Footprint_Tracker.Data
                 new Activity { Id = 2, Name = "Bus Travel", Unit = "miles", EmissionFactor = 0.105m, ActivityTypeId = 1 },
                 new Activity { Id = 3, Name = "Beef Meal", Unit = "meals", EmissionFactor = 2.5m, ActivityTypeId = 2 }
             );
+            modelBuilder.Entity<Tips>().HasData(
+    new Tips
+    {
+        Id = 1,
+        Title = "Reduce Car Journeys",
+        Content = "Try walking, cycling, or public transport for shorter journeys to reduce travel emissions.",
+        ActivityTypeId = 1,
+        VideoUrl = null
+    },
+    new Tips
+    {
+        Id = 2,
+        Title = "Save Home Energy",
+        Content = "Turn off appliances when not in use and reduce heating where possible to cut energy consumption.",
+        ActivityTypeId = 3,
+        VideoUrl = null
+    },
+    new Tips
+    {
+        Id = 3,
+        Title = "Start Small",
+        Content = "Making small changes to transport, food, and energy habits can reduce your carbon footprint over time.",
+        ActivityTypeId = null,
+        VideoUrl = null
+    }
+);
         }
     }
 }
