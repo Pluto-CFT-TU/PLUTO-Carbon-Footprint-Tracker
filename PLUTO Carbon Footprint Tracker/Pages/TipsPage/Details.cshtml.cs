@@ -18,7 +18,7 @@ namespace PLUTO_Carbon_Footprint_Tracker.Pages.TipsPage
             _context = context;
         }
 
-        public Tips Tips { get; set; } = default!;
+        public Tips Tip { get; set; } = default!;
 
         public async Task<IActionResult> OnGetAsync(int? id)
         {
@@ -34,7 +34,7 @@ namespace PLUTO_Carbon_Footprint_Tracker.Pages.TipsPage
             }
             else
             {
-                Tips = tips;
+                Tip = tips;
             }
             return Page();
         }

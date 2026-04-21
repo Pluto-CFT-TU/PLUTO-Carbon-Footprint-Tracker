@@ -2,17 +2,20 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using PLUTO_Carbon_Footprint_Tracker.Data;
 
 #nullable disable
 
-namespace PLUTO_Carbon_Footprint_Tracker.Data.Migrations
+namespace PLUTO_Carbon_Footprint_Tracker.Migrations
 {
     [DbContext(typeof(CFTDBContext))]
-    partial class CFTDBContextModelSnapshot : ModelSnapshot
+    [Migration("20260421213715_database")]
+    partial class database
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder.HasAnnotation("ProductVersion", "8.0.25");
@@ -68,11 +71,128 @@ namespace PLUTO_Carbon_Footprint_Tracker.Data.Migrations
                         new
                         {
                             Id = 3,
+                            ActivityTypeId = 1,
+                            EmissionFactor = 0.041m,
+                            IsActive = true,
+                            Name = "Train Travel",
+                            Unit = "miles"
+                        },
+                        new
+                        {
+                            Id = 4,
+                            ActivityTypeId = 1,
+                            EmissionFactor = 0.255m,
+                            IsActive = true,
+                            Name = "Flight",
+                            Unit = "miles"
+                        },
+                        new
+                        {
+                            Id = 5,
                             ActivityTypeId = 2,
-                            EmissionFactor = 2.5m,
+                            EmissionFactor = 2.500m,
                             IsActive = true,
                             Name = "Beef Meal",
                             Unit = "meals"
+                        },
+                        new
+                        {
+                            Id = 6,
+                            ActivityTypeId = 2,
+                            EmissionFactor = 1.100m,
+                            IsActive = true,
+                            Name = "Chicken Meal",
+                            Unit = "meals"
+                        },
+                        new
+                        {
+                            Id = 7,
+                            ActivityTypeId = 2,
+                            EmissionFactor = 0.600m,
+                            IsActive = true,
+                            Name = "Vegetarian Meal",
+                            Unit = "meals"
+                        },
+                        new
+                        {
+                            Id = 8,
+                            ActivityTypeId = 2,
+                            EmissionFactor = 0.300m,
+                            IsActive = true,
+                            Name = "Dairy Consumption",
+                            Unit = "servings"
+                        },
+                        new
+                        {
+                            Id = 9,
+                            ActivityTypeId = 3,
+                            EmissionFactor = 0.050m,
+                            IsActive = true,
+                            Name = "Phone Charging",
+                            Unit = "hours"
+                        },
+                        new
+                        {
+                            Id = 10,
+                            ActivityTypeId = 3,
+                            EmissionFactor = 0.080m,
+                            IsActive = true,
+                            Name = "Laptop Use",
+                            Unit = "hours"
+                        },
+                        new
+                        {
+                            Id = 11,
+                            ActivityTypeId = 3,
+                            EmissionFactor = 0.300m,
+                            IsActive = true,
+                            Name = "Heating Use",
+                            Unit = "hours"
+                        },
+                        new
+                        {
+                            Id = 12,
+                            ActivityTypeId = 3,
+                            EmissionFactor = 0.600m,
+                            IsActive = true,
+                            Name = "Washing Machine",
+                            Unit = "cycles"
+                        },
+                        new
+                        {
+                            Id = 13,
+                            ActivityTypeId = 4,
+                            EmissionFactor = 0.036m,
+                            IsActive = true,
+                            Name = "Streaming TV",
+                            Unit = "hours"
+                        },
+                        new
+                        {
+                            Id = 14,
+                            ActivityTypeId = 4,
+                            EmissionFactor = 0.120m,
+                            IsActive = true,
+                            Name = "Gaming Console",
+                            Unit = "hours"
+                        },
+                        new
+                        {
+                            Id = 15,
+                            ActivityTypeId = 4,
+                            EmissionFactor = 1.800m,
+                            IsActive = true,
+                            Name = "Cinema Trip",
+                            Unit = "trips"
+                        },
+                        new
+                        {
+                            Id = 16,
+                            ActivityTypeId = 4,
+                            EmissionFactor = 0.411m,
+                            IsActive = true,
+                            Name = "Gym Travel",
+                            Unit = "miles"
                         });
                 });
 
@@ -108,6 +228,11 @@ namespace PLUTO_Carbon_Footprint_Tracker.Data.Migrations
                         {
                             Id = 3,
                             Name = "Energy"
+                        },
+                        new
+                        {
+                            Id = 4,
+                            Name = "Leisure"
                         });
                 });
 
@@ -257,6 +382,9 @@ namespace PLUTO_Carbon_Footprint_Tracker.Data.Migrations
                         .IsRequired()
                         .HasColumnType("TEXT");
 
+                    b.Property<bool>("IsFaq")
+                        .HasColumnType("INTEGER");
+
                     b.Property<string>("Title")
                         .IsRequired()
                         .HasColumnType("TEXT");
@@ -276,20 +404,146 @@ namespace PLUTO_Carbon_Footprint_Tracker.Data.Migrations
                             Id = 1,
                             ActivityTypeId = 1,
                             Content = "Try walking, cycling, or public transport for shorter journeys to reduce travel emissions.",
+                            IsFaq = false,
                             Title = "Reduce Car Journeys"
                         },
                         new
                         {
                             Id = 2,
-                            ActivityTypeId = 3,
-                            Content = "Turn off appliances when not in use and reduce heating where possible to cut energy consumption.",
-                            Title = "Save Home Energy"
+                            ActivityTypeId = 1,
+                            Content = "Buses and trains produce significantly less CO2 per passenger than cars.",
+                            IsFaq = false,
+                            Title = "Use Public Transport"
                         },
                         new
                         {
                             Id = 3,
-                            Content = "Making small changes to transport, food, and energy habits can reduce your carbon footprint over time.",
-                            Title = "Start Small"
+                            ActivityTypeId = 1,
+                            Content = "Plan routes efficiently to reduce total distance travelled.",
+                            IsFaq = false,
+                            Title = "Combine Trips"
+                        },
+                        new
+                        {
+                            Id = 4,
+                            ActivityTypeId = 2,
+                            Content = "Reducing beef consumption can significantly lower your carbon footprint.",
+                            IsFaq = false,
+                            Title = "Eat Less Red Meat"
+                        },
+                        new
+                        {
+                            Id = 5,
+                            ActivityTypeId = 2,
+                            Content = "Even one meat-free day a week can make a difference.",
+                            IsFaq = false,
+                            Title = "Try Meat-Free Days"
+                        },
+                        new
+                        {
+                            Id = 6,
+                            ActivityTypeId = 2,
+                            Content = "Plan meals and store food properly to avoid unnecessary waste.",
+                            IsFaq = false,
+                            Title = "Reduce Food Waste"
+                        },
+                        new
+                        {
+                            Id = 7,
+                            ActivityTypeId = 3,
+                            Content = "Electronics still use power in standby mode—switch them off completely.",
+                            IsFaq = false,
+                            Title = "Turn Off Standby Devices"
+                        },
+                        new
+                        {
+                            Id = 8,
+                            ActivityTypeId = 3,
+                            Content = "Reducing your heating by even 1°C can cut energy consumption.",
+                            IsFaq = false,
+                            Title = "Lower Heating Usage"
+                        },
+                        new
+                        {
+                            Id = 9,
+                            ActivityTypeId = 3,
+                            Content = "Modern appliances use significantly less energy than older ones.",
+                            IsFaq = false,
+                            Title = "Use Energy Efficient Appliances"
+                        },
+                        new
+                        {
+                            Id = 10,
+                            ActivityTypeId = 4,
+                            Content = "Lowering video quality reduces data usage and energy consumption.",
+                            IsFaq = false,
+                            Title = "Reduce Streaming Quality"
+                        },
+                        new
+                        {
+                            Id = 11,
+                            ActivityTypeId = 4,
+                            Content = "Gaming consoles can consume significant power during long sessions.",
+                            IsFaq = false,
+                            Title = "Limit Gaming Time"
+                        },
+                        new
+                        {
+                            Id = 12,
+                            ActivityTypeId = 4,
+                            Content = "Outdoor activities have a much lower environmental impact.",
+                            IsFaq = false,
+                            Title = "Choose Outdoor Activities"
+                        },
+                        new
+                        {
+                            Id = 13,
+                            Content = "Small daily changes can add up to a significant reduction over time.",
+                            IsFaq = false,
+                            Title = "Start Small",
+                            VideoUrl = "https://www.youtube.com/embed/BNzgS95r8U8"
+                        },
+                        new
+                        {
+                            Id = 14,
+                            Content = "Regularly reviewing your emissions helps you stay motivated.",
+                            IsFaq = false,
+                            Title = "Track Your Progress"
+                        },
+                        new
+                        {
+                            Id = 15,
+                            Content = "Your emissions are calculated using predefined emission factors multiplied by your activity quantity.",
+                            IsFaq = true,
+                            Title = "How is my carbon footprint calculated?"
+                        },
+                        new
+                        {
+                            Id = 16,
+                            Content = "Yes. You can edit or delete entries from the Emissions Log page.",
+                            IsFaq = true,
+                            Title = "Can I edit my entries?"
+                        },
+                        new
+                        {
+                            Id = 17,
+                            Content = "Recommendations are based on the activity type contributing the most CO2 in your logs.",
+                            IsFaq = true,
+                            Title = "Why do I see recommended tips?"
+                        },
+                        new
+                        {
+                            Id = 18,
+                            Content = "No, but regular logging improves the accuracy of insights and recommendations.",
+                            IsFaq = true,
+                            Title = "Do I need to log every day?"
+                        },
+                        new
+                        {
+                            Id = 19,
+                            Content = "Your account uses Auth0 authentication and your data is stored securely.",
+                            IsFaq = true,
+                            Title = "Is my data secure?"
                         });
                 });
 

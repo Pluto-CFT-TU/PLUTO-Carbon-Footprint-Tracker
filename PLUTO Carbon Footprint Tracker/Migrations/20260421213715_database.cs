@@ -5,10 +5,10 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 #pragma warning disable CA1814 // Prefer jagged arrays over multidimensional
 
-namespace PLUTO_Carbon_Footprint_Tracker.Data.Migrations
+namespace PLUTO_Carbon_Footprint_Tracker.Migrations
 {
     /// <inheritdoc />
-    public partial class InitialCreate : Migration
+    public partial class database : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -98,7 +98,8 @@ namespace PLUTO_Carbon_Footprint_Tracker.Data.Migrations
                     ActivityTypeId = table.Column<int>(type: "INTEGER", nullable: true),
                     Title = table.Column<string>(type: "TEXT", nullable: false),
                     Content = table.Column<string>(type: "TEXT", nullable: false),
-                    VideoUrl = table.Column<string>(type: "TEXT", nullable: true)
+                    VideoUrl = table.Column<string>(type: "TEXT", nullable: true),
+                    IsFaq = table.Column<bool>(type: "INTEGER", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -195,13 +196,23 @@ namespace PLUTO_Carbon_Footprint_Tracker.Data.Migrations
                 {
                     { 1, null, "Transport" },
                     { 2, null, "Food" },
-                    { 3, null, "Energy" }
+                    { 3, null, "Energy" },
+                    { 4, null, "Leisure" }
                 });
 
             migrationBuilder.InsertData(
                 table: "Tips",
-                columns: new[] { "Id", "ActivityTypeId", "Content", "Title", "VideoUrl" },
-                values: new object[] { 3, null, "Making small changes to transport, food, and energy habits can reduce your carbon footprint over time.", "Start Small", null });
+                columns: new[] { "Id", "ActivityTypeId", "Content", "IsFaq", "Title", "VideoUrl" },
+                values: new object[,]
+                {
+                    { 13, null, "Small daily changes can add up to a significant reduction over time.", false, "Start Small", "https://www.youtube.com/embed/BNzgS95r8U8" },
+                    { 14, null, "Regularly reviewing your emissions helps you stay motivated.", false, "Track Your Progress", null },
+                    { 15, null, "Your emissions are calculated using predefined emission factors multiplied by your activity quantity.", true, "How is my carbon footprint calculated?", null },
+                    { 16, null, "Yes. You can edit or delete entries from the Emissions Log page.", true, "Can I edit my entries?", null },
+                    { 17, null, "Recommendations are based on the activity type contributing the most CO2 in your logs.", true, "Why do I see recommended tips?", null },
+                    { 18, null, "No, but regular logging improves the accuracy of insights and recommendations.", true, "Do I need to log every day?", null },
+                    { 19, null, "Your account uses Auth0 authentication and your data is stored securely.", true, "Is my data secure?", null }
+                });
 
             migrationBuilder.InsertData(
                 table: "Activities",
@@ -210,16 +221,39 @@ namespace PLUTO_Carbon_Footprint_Tracker.Data.Migrations
                 {
                     { 1, 1, 0.411m, true, "Car Travel", "miles" },
                     { 2, 1, 0.105m, true, "Bus Travel", "miles" },
-                    { 3, 2, 2.5m, true, "Beef Meal", "meals" }
+                    { 3, 1, 0.041m, true, "Train Travel", "miles" },
+                    { 4, 1, 0.255m, true, "Flight", "miles" },
+                    { 5, 2, 2.500m, true, "Beef Meal", "meals" },
+                    { 6, 2, 1.100m, true, "Chicken Meal", "meals" },
+                    { 7, 2, 0.600m, true, "Vegetarian Meal", "meals" },
+                    { 8, 2, 0.300m, true, "Dairy Consumption", "servings" },
+                    { 9, 3, 0.050m, true, "Phone Charging", "hours" },
+                    { 10, 3, 0.080m, true, "Laptop Use", "hours" },
+                    { 11, 3, 0.300m, true, "Heating Use", "hours" },
+                    { 12, 3, 0.600m, true, "Washing Machine", "cycles" },
+                    { 13, 4, 0.036m, true, "Streaming TV", "hours" },
+                    { 14, 4, 0.120m, true, "Gaming Console", "hours" },
+                    { 15, 4, 1.800m, true, "Cinema Trip", "trips" },
+                    { 16, 4, 0.411m, true, "Gym Travel", "miles" }
                 });
 
             migrationBuilder.InsertData(
                 table: "Tips",
-                columns: new[] { "Id", "ActivityTypeId", "Content", "Title", "VideoUrl" },
+                columns: new[] { "Id", "ActivityTypeId", "Content", "IsFaq", "Title", "VideoUrl" },
                 values: new object[,]
                 {
-                    { 1, 1, "Try walking, cycling, or public transport for shorter journeys to reduce travel emissions.", "Reduce Car Journeys", null },
-                    { 2, 3, "Turn off appliances when not in use and reduce heating where possible to cut energy consumption.", "Save Home Energy", null }
+                    { 1, 1, "Try walking, cycling, or public transport for shorter journeys to reduce travel emissions.", false, "Reduce Car Journeys", null },
+                    { 2, 1, "Buses and trains produce significantly less CO2 per passenger than cars.", false, "Use Public Transport", null },
+                    { 3, 1, "Plan routes efficiently to reduce total distance travelled.", false, "Combine Trips", null },
+                    { 4, 2, "Reducing beef consumption can significantly lower your carbon footprint.", false, "Eat Less Red Meat", null },
+                    { 5, 2, "Even one meat-free day a week can make a difference.", false, "Try Meat-Free Days", null },
+                    { 6, 2, "Plan meals and store food properly to avoid unnecessary waste.", false, "Reduce Food Waste", null },
+                    { 7, 3, "Electronics still use power in standby mode—switch them off completely.", false, "Turn Off Standby Devices", null },
+                    { 8, 3, "Reducing your heating by even 1°C can cut energy consumption.", false, "Lower Heating Usage", null },
+                    { 9, 3, "Modern appliances use significantly less energy than older ones.", false, "Use Energy Efficient Appliances", null },
+                    { 10, 4, "Lowering video quality reduces data usage and energy consumption.", false, "Reduce Streaming Quality", null },
+                    { 11, 4, "Gaming consoles can consume significant power during long sessions.", false, "Limit Gaming Time", null },
+                    { 12, 4, "Outdoor activities have a much lower environmental impact.", false, "Choose Outdoor Activities", null }
                 });
 
             migrationBuilder.CreateIndex(

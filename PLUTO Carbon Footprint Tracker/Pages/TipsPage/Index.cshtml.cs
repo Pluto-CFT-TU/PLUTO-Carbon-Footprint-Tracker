@@ -18,7 +18,7 @@ namespace PLUTO_Carbon_Footprint_Tracker.Pages.TipsPage
 
         public IList<Tips> RecommendedTips { get; set; } = new List<Tips>();
         public IList<Tips> GeneralTips { get; set; } = new List<Tips>();
-
+        public IList<Tips> FaqItems { get; set; } = new List<Tips>();
         public string? HighestCarbonActivityType { get; set; }
 
         public async Task OnGetAsync()
@@ -55,7 +55,8 @@ namespace PLUTO_Carbon_Footprint_Tracker.Pages.TipsPage
 
                 RecommendedTips = await _context.Tips
                     .Include(t => t.ActivityType)
-                    .Where(t => t.ActivityType != null &&
+                    .Where(t => !t.IsFaq &&
+                                t.ActivityType != null &&
                                 t.ActivityType.Name == HighestCarbonActivityType)
                     .OrderBy(t => t.Title)
                     .Take(5)
@@ -67,7 +68,14 @@ namespace PLUTO_Carbon_Footprint_Tracker.Pages.TipsPage
             // Load more tips not already shown
             GeneralTips = await _context.Tips
                 .Include(t => t.ActivityType)
-                .Where(t => !recommendedIds.Contains(t.Id))
+                .Where(t => !t.IsFaq &&
+                            !recommendedIds.Contains(t.Id))
+                .OrderBy(t => t.Title)
+                .Take(4)
+                .ToListAsync();
+
+            FaqItems = await _context.Tips
+                .Where(t => t.IsFaq)
                 .OrderBy(t => t.Title)
                 .Take(4)
                 .ToListAsync();
