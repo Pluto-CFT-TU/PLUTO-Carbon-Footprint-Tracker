@@ -48,8 +48,7 @@ namespace PLUTO_Carbon_Footprint_Tracker.Pages.EmissionsLog
                     ActivityTypeName = a.ActivityType.Name,
                     Unit = a.Unit,
                     EmissionFactor = a.EmissionFactor
-                })
-                .ToListAsync();
+                }).ToListAsync();
 
             return Page();
         }
