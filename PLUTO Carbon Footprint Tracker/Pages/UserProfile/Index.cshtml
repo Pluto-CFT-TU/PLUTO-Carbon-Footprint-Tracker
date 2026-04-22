@@ -1,0 +1,46 @@
+﻿@page
+@model PLUTO_Carbon_Footprint_Tracker.Pages.UserProfile.IndexModel
+@{
+    ViewData["Title"] = "Profile";
+}
+
+<h1>Profile</h1>
+<div class="card mb-3">
+    <div class="card-body">
+        <h4>Account Information</h4>
+        <p><strong>Username:</strong> @Model.CurrentUser.Username</p>
+        <p><strong>Email:</strong> @Model.CurrentUser.Email</p>
+        <p><strong>Membership:</strong> @Model.CurrentUser.Membership</p>
+        <p><strong>Rank:</strong> @Model.CurrentUser.Rank</p>
+        <p><strong>Joined:</strong> @Model.CurrentUser.CreatedAt.ToString("dd MMM yyyy")</p>
+    </div>
+</div>
+
+<div class="card mb-3">
+    <div class="card-body">
+        <h4>Emission Summary</h4>
+        <p><strong>Total Entries Logged:</strong> @Model.TotalEntriesLogged</p>
+        <p><strong>Total CO₂ Logged:</strong> @Model.TotalCarbonLogged.ToString("0.###") kg</p>
+        <p><strong>Highest Carbon Category:</strong> @(Model.HighestCarbonActivityType ?? "No data yet")</p>
+        <hr>
+        <p><strong>Last 7 Days:</strong> @Model.WeeklyTotal.ToString("0.###") kg</p>
+        <p><strong>This Month:</strong> @Model.MonthlyTotal.ToString("0.###") kg</p>
+        <p>
+            <strong>Best Day:</strong>
+            @if (Model.BestDayDate != null)
+            {
+                @Model.BestDayDate.Value.ToString("dd MMM yyyy")
+                <span> (@Model.BestDayCarbon.ToString("0.###") kg)</span>
+            }
+            else
+            {
+                <span>No data yet</span>
+            }
+        </p>
+    </div>
+</div>
+
+<div>
+    <a asp-page="/SettingsPage/Index" class="btn btn-primary">Go to Settings</a>
+</div>
+

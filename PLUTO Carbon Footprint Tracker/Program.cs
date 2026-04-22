@@ -53,6 +53,7 @@ builder.Services
     // Also stored in appsettings.json under "Auth0:ClientId"
     // ---------------------------------------------------------
     options.ClientId = builder.Configuration["Auth0:ClientId"];
+    options.Scope = "openid profile email";
 });
 
 var app = builder.Build();
