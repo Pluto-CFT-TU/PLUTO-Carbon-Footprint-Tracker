@@ -298,6 +298,104 @@ namespace PLUTO_Carbon_Footprint_Tracker.Data
                     IsFaq = true
                 }
             );
+            modelBuilder.Entity<NewsArticle>().HasData(
+
+                new NewsArticle
+                {
+                    Id = 1,
+                    Title = "Act Now: Climate Action Urged Globally",
+                    Summary = "Governments are being urged to take immediate action to reduce emissions.",
+                    Content = "Experts warn that immediate global action is required to prevent irreversible climate damage. Policy changes and individual responsibility are key.",
+                    ImageUrl = "/Images/News/Actnow.jpg",
+                    PublishedAt = new DateTime(2026, 4, 20),
+                    Category = "Climate",
+                    IsPublished = true
+                },
+
+                new NewsArticle
+                {
+                    Id = 2,
+                    Title = "Deforestation Rates Continue to Rise",
+                    Summary = "Forests are being cleared at alarming rates, increasing global CO₂ levels.",
+                    Content = "Deforestation remains one of the largest contributors to carbon emissions. Conservation efforts are critical to reversing the damage.",
+                    ImageUrl = "/Images/News/Deforest.jpg",
+                    PublishedAt = new DateTime(2026, 4, 18),
+                    Category = "Environment",
+                    IsPublished = true
+                },
+
+                new NewsArticle
+                {
+                    Id = 3,
+                    Title = "Wildfires Contribute to Record Emissions",
+                    Summary = "Increasing wildfires are releasing massive amounts of CO₂.",
+                    Content = "Rising global temperatures have led to more frequent wildfires, significantly impacting carbon emissions and air quality.",
+                    ImageUrl = "/Images/News/Fire.jpg",
+                    PublishedAt = new DateTime(2026, 4, 17),
+                    Category = "Climate",
+                    IsPublished = true
+                },
+
+                new NewsArticle
+                {
+                    Id = 4,
+                    Title = "Wind Energy Expands Across Rural Areas",
+                    Summary = "Wind farms are becoming more common as renewable energy demand grows.",
+                    Content = "Countries are investing heavily in wind energy infrastructure to reduce reliance on fossil fuels.",
+                    ImageUrl = "/Images/News/grassywindmills.jpg",
+                    PublishedAt = new DateTime(2026, 4, 15),
+                    Category = "Energy",
+                    IsPublished = true
+                },
+
+                new NewsArticle
+                {
+                    Id = 5,
+                    Title = "Melting Ice Caps Signal Climate Emergency",
+                    Summary = "Polar ice melt is accelerating, raising sea levels globally.",
+                    Content = "Scientists report that ice caps are melting faster than expected, posing a serious threat to coastal regions.",
+                    ImageUrl = "/Images/News/ice.jpg",
+                    PublishedAt = new DateTime(2026, 4, 12),
+                    Category = "Climate",
+                    IsPublished = true
+                },
+
+                new NewsArticle
+                {
+                    Id = 6,
+                    Title = "A Future Without Action Looks Grim",
+                    Summary = "Experts outline the consequences of failing to reduce emissions.",
+                    Content = "Without immediate changes, future generations could face severe environmental challenges including extreme weather and resource shortages.",
+                    ImageUrl = "/Images/News/Nofuture.jpg",
+                    PublishedAt = new DateTime(2026, 4, 10),
+                    Category = "Awareness",
+                    IsPublished = true
+                },
+
+                new NewsArticle
+                {
+                    Id = 7,
+                    Title = "Renewables Help Cut Urban Emissions",
+                    Summary = "Cities adopting renewables are seeing emission reductions.",
+                    Content = "Urban centres transitioning to renewable energy sources are experiencing measurable decreases in carbon output.",
+                    ImageUrl = "/Images/News/grassywindmills.jpg",
+                    PublishedAt = new DateTime(2026, 4, 8),
+                    Category = "Energy",
+                    IsPublished = true
+                },
+
+                new NewsArticle
+                {
+                    Id = 8,
+                    Title = "Climate Awareness Campaigns Gain Momentum",
+                    Summary = "Public awareness is increasing around sustainability.",
+                    Content = "Educational campaigns are helping people understand how daily habits impact their carbon footprint.",
+                    ImageUrl = "/Images/News/Actnow.jpg",
+                    PublishedAt = new DateTime(2026, 4, 5),
+                    Category = "Awareness",
+                    IsPublished = true
+                }
+            );
         }
     }
 }

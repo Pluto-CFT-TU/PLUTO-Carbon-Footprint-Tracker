@@ -2,20 +2,17 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
-using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using PLUTO_Carbon_Footprint_Tracker.Data;
 
 #nullable disable
 
-namespace PLUTO_Carbon_Footprint_Tracker.Migrations
+namespace PLUTO_Carbon_Footprint_Tracker.Data.Migrations
 {
     [DbContext(typeof(CFTDBContext))]
-    [Migration("20260421213715_database")]
-    partial class database
+    partial class CFTDBContextModelSnapshot : ModelSnapshot
     {
-        /// <inheritdoc />
-        protected override void BuildTargetModel(ModelBuilder modelBuilder)
+        protected override void BuildModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder.HasAnnotation("ProductVersion", "8.0.25");
@@ -275,7 +272,7 @@ namespace PLUTO_Carbon_Footprint_Tracker.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("INTEGER");
 
-                    b.Property<string>("CategoryTag")
+                    b.Property<string>("Category")
                         .HasColumnType("TEXT");
 
                     b.Property<string>("Content")
@@ -291,9 +288,6 @@ namespace PLUTO_Carbon_Footprint_Tracker.Migrations
                     b.Property<DateTime>("PublishedAt")
                         .HasColumnType("TEXT");
 
-                    b.Property<string>("SourceName")
-                        .HasColumnType("TEXT");
-
                     b.Property<string>("Summary")
                         .IsRequired()
                         .HasColumnType("TEXT");
@@ -305,6 +299,96 @@ namespace PLUTO_Carbon_Footprint_Tracker.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("NewsArticles");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = 1,
+                            Category = "Climate",
+                            Content = "Experts warn that immediate global action is required to prevent irreversible climate damage. Policy changes and individual responsibility are key.",
+                            ImageUrl = "/Images/News/Actnow.jpg",
+                            IsPublished = true,
+                            PublishedAt = new DateTime(2026, 4, 20, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            Summary = "Governments are being urged to take immediate action to reduce emissions.",
+                            Title = "Act Now: Climate Action Urged Globally"
+                        },
+                        new
+                        {
+                            Id = 2,
+                            Category = "Environment",
+                            Content = "Deforestation remains one of the largest contributors to carbon emissions. Conservation efforts are critical to reversing the damage.",
+                            ImageUrl = "/Images/News/Deforest.jpg",
+                            IsPublished = true,
+                            PublishedAt = new DateTime(2026, 4, 18, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            Summary = "Forests are being cleared at alarming rates, increasing global CO₂ levels.",
+                            Title = "Deforestation Rates Continue to Rise"
+                        },
+                        new
+                        {
+                            Id = 3,
+                            Category = "Climate",
+                            Content = "Rising global temperatures have led to more frequent wildfires, significantly impacting carbon emissions and air quality.",
+                            ImageUrl = "/Images/News/Fire.jpg",
+                            IsPublished = true,
+                            PublishedAt = new DateTime(2026, 4, 17, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            Summary = "Increasing wildfires are releasing massive amounts of CO₂.",
+                            Title = "Wildfires Contribute to Record Emissions"
+                        },
+                        new
+                        {
+                            Id = 4,
+                            Category = "Energy",
+                            Content = "Countries are investing heavily in wind energy infrastructure to reduce reliance on fossil fuels.",
+                            ImageUrl = "/Images/News/grassywindmills.jpg",
+                            IsPublished = true,
+                            PublishedAt = new DateTime(2026, 4, 15, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            Summary = "Wind farms are becoming more common as renewable energy demand grows.",
+                            Title = "Wind Energy Expands Across Rural Areas"
+                        },
+                        new
+                        {
+                            Id = 5,
+                            Category = "Climate",
+                            Content = "Scientists report that ice caps are melting faster than expected, posing a serious threat to coastal regions.",
+                            ImageUrl = "/Images/News/ice.jpg",
+                            IsPublished = true,
+                            PublishedAt = new DateTime(2026, 4, 12, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            Summary = "Polar ice melt is accelerating, raising sea levels globally.",
+                            Title = "Melting Ice Caps Signal Climate Emergency"
+                        },
+                        new
+                        {
+                            Id = 6,
+                            Category = "Awareness",
+                            Content = "Without immediate changes, future generations could face severe environmental challenges including extreme weather and resource shortages.",
+                            ImageUrl = "/Images/News/Nofuture.jpg",
+                            IsPublished = true,
+                            PublishedAt = new DateTime(2026, 4, 10, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            Summary = "Experts outline the consequences of failing to reduce emissions.",
+                            Title = "A Future Without Action Looks Grim"
+                        },
+                        new
+                        {
+                            Id = 7,
+                            Category = "Energy",
+                            Content = "Urban centres transitioning to renewable energy sources are experiencing measurable decreases in carbon output.",
+                            ImageUrl = "/Images/News/grassywindmills.jpg",
+                            IsPublished = true,
+                            PublishedAt = new DateTime(2026, 4, 8, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            Summary = "Cities adopting renewables are seeing emission reductions.",
+                            Title = "Renewables Help Cut Urban Emissions"
+                        },
+                        new
+                        {
+                            Id = 8,
+                            Category = "Awareness",
+                            Content = "Educational campaigns are helping people understand how daily habits impact their carbon footprint.",
+                            ImageUrl = "/Images/News/Actnow.jpg",
+                            IsPublished = true,
+                            PublishedAt = new DateTime(2026, 4, 5, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            Summary = "Public awareness is increasing around sustainability.",
+                            Title = "Climate Awareness Campaigns Gain Momentum"
+                        });
                 });
 
             modelBuilder.Entity("PLUTO_Carbon_Footprint_Tracker.Data.NotificationSetting", b =>

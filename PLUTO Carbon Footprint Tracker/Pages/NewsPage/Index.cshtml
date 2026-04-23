@@ -1,0 +1,64 @@
+﻿@page
+@model PLUTO_Carbon_Footprint_Tracker.Pages.NewsPage.IndexModel
+
+@{
+    ViewData["Title"] = "News";
+}
+
+<h1>News</h1>
+
+@if (Model.CurrentNews.Any())
+{
+    <div class="d-flex justify-content-between align-items-center">
+        <h2>Current News</h2>
+        <a asp-page="./AllNews">See all &gt;</a>
+    </div>
+
+    <p>Recent news regarding carbon emissions, sustainability, and environmental impact.</p>
+
+    <div class="card mb-3">
+        @foreach (var article in Model.CurrentNews)
+        {
+            <div class="card-body border-bottom">
+                @if (!string.IsNullOrWhiteSpace(article.ImageUrl))
+                {
+                    <img src="@article.ImageUrl" alt="@article.Title" class="img-fluid rounded mb-2"
+                         style="max-height: 220px; object-fit: cover; width: 100%;" />
+                }
+                <h4>@article.Title</h4>
+                <p><strong>Date:</strong> @article.PublishedAt.ToString("dd MMM yyyy")</p>
+                <p>@article.Summary</p>
+                <a asp-page="./Details" asp-route-id="@article.Id" class="btn btn-primary">Read More</a>
+            </div>
+        }
+    </div>
+}
+
+<div class="d-flex justify-content-between align-items-center">
+    <h2>More News</h2>
+    <a asp-page="./AllNews">See all &gt;</a>
+</div>
+
+@if (Model.MoreNews.Any())
+{
+    <div class="card mb-3">
+        @foreach (var article in Model.MoreNews)
+        {
+            <div class="card-body border-bottom">
+                @if (!string.IsNullOrWhiteSpace(article.ImageUrl))
+                {
+                    <img src="@article.ImageUrl" alt="@article.Title" class="img-fluid rounded mb-2"
+                         style="max-height: 220px; object-fit: cover; width: 100%;" />
+                }
+                <h4>@article.Title</h4>
+                <p><strong>Date:</strong> @article.PublishedAt.ToString("dd MMM yyyy")</p>
+                <p>@article.Summary</p>
+                <a asp-page="./Details" asp-route-id="@article.Id" class="btn btn-primary">Read More</a>
+            </div>
+        }
+    </div>
+}
+else
+{
+    <p>No more news available.</p>
+}

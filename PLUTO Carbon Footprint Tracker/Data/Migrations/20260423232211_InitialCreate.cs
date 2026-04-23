@@ -5,10 +5,10 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 #pragma warning disable CA1814 // Prefer jagged arrays over multidimensional
 
-namespace PLUTO_Carbon_Footprint_Tracker.Migrations
+namespace PLUTO_Carbon_Footprint_Tracker.Data.Migrations
 {
     /// <inheritdoc />
-    public partial class database : Migration
+    public partial class InitialCreate : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -37,9 +37,8 @@ namespace PLUTO_Carbon_Footprint_Tracker.Migrations
                     Summary = table.Column<string>(type: "TEXT", nullable: false),
                     Content = table.Column<string>(type: "TEXT", nullable: false),
                     ImageUrl = table.Column<string>(type: "TEXT", nullable: true),
-                    SourceName = table.Column<string>(type: "TEXT", nullable: true),
                     PublishedAt = table.Column<DateTime>(type: "TEXT", nullable: false),
-                    CategoryTag = table.Column<string>(type: "TEXT", nullable: true),
+                    Category = table.Column<string>(type: "TEXT", nullable: true),
                     IsPublished = table.Column<bool>(type: "INTEGER", nullable: false)
                 },
                 constraints: table =>
@@ -198,6 +197,21 @@ namespace PLUTO_Carbon_Footprint_Tracker.Migrations
                     { 2, null, "Food" },
                     { 3, null, "Energy" },
                     { 4, null, "Leisure" }
+                });
+
+            migrationBuilder.InsertData(
+                table: "NewsArticles",
+                columns: new[] { "Id", "Category", "Content", "ImageUrl", "IsPublished", "PublishedAt", "Summary", "Title" },
+                values: new object[,]
+                {
+                    { 1, "Climate", "Experts warn that immediate global action is required to prevent irreversible climate damage. Policy changes and individual responsibility are key.", "/Images/News/Actnow.jpg", true, new DateTime(2026, 4, 20, 0, 0, 0, 0, DateTimeKind.Unspecified), "Governments are being urged to take immediate action to reduce emissions.", "Act Now: Climate Action Urged Globally" },
+                    { 2, "Environment", "Deforestation remains one of the largest contributors to carbon emissions. Conservation efforts are critical to reversing the damage.", "/Images/News/Deforest.jpg", true, new DateTime(2026, 4, 18, 0, 0, 0, 0, DateTimeKind.Unspecified), "Forests are being cleared at alarming rates, increasing global CO₂ levels.", "Deforestation Rates Continue to Rise" },
+                    { 3, "Climate", "Rising global temperatures have led to more frequent wildfires, significantly impacting carbon emissions and air quality.", "/Images/News/Fire.jpg", true, new DateTime(2026, 4, 17, 0, 0, 0, 0, DateTimeKind.Unspecified), "Increasing wildfires are releasing massive amounts of CO₂.", "Wildfires Contribute to Record Emissions" },
+                    { 4, "Energy", "Countries are investing heavily in wind energy infrastructure to reduce reliance on fossil fuels.", "/Images/News/grassywindmills.jpg", true, new DateTime(2026, 4, 15, 0, 0, 0, 0, DateTimeKind.Unspecified), "Wind farms are becoming more common as renewable energy demand grows.", "Wind Energy Expands Across Rural Areas" },
+                    { 5, "Climate", "Scientists report that ice caps are melting faster than expected, posing a serious threat to coastal regions.", "/Images/News/ice.jpg", true, new DateTime(2026, 4, 12, 0, 0, 0, 0, DateTimeKind.Unspecified), "Polar ice melt is accelerating, raising sea levels globally.", "Melting Ice Caps Signal Climate Emergency" },
+                    { 6, "Awareness", "Without immediate changes, future generations could face severe environmental challenges including extreme weather and resource shortages.", "/Images/News/Nofuture.jpg", true, new DateTime(2026, 4, 10, 0, 0, 0, 0, DateTimeKind.Unspecified), "Experts outline the consequences of failing to reduce emissions.", "A Future Without Action Looks Grim" },
+                    { 7, "Energy", "Urban centres transitioning to renewable energy sources are experiencing measurable decreases in carbon output.", "/Images/News/grassywindmills.jpg", true, new DateTime(2026, 4, 8, 0, 0, 0, 0, DateTimeKind.Unspecified), "Cities adopting renewables are seeing emission reductions.", "Renewables Help Cut Urban Emissions" },
+                    { 8, "Awareness", "Educational campaigns are helping people understand how daily habits impact their carbon footprint.", "/Images/News/Actnow.jpg", true, new DateTime(2026, 4, 5, 0, 0, 0, 0, DateTimeKind.Unspecified), "Public awareness is increasing around sustainability.", "Climate Awareness Campaigns Gain Momentum" }
                 });
 
             migrationBuilder.InsertData(

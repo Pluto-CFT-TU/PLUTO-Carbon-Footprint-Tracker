@@ -7,9 +7,8 @@
         public string Summary { get; set; } = string.Empty;
         public string Content { get; set; } = string.Empty;
         public string? ImageUrl { get; set; }
-        public string? SourceName { get; set; }
         public DateTime PublishedAt { get; set; }
-        public string? CategoryTag { get; set; }
+        public string? Category { get; set; }
         public bool IsPublished { get; set; } = true;
     }
 }
