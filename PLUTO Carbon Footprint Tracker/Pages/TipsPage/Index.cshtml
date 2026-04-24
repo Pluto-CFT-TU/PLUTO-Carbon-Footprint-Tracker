@@ -5,61 +5,230 @@
     ViewData["Title"] = "Tips";
 }
 
-<h1>Tips</h1>
+<style>
+    body {
+        background: #eef5ee;
+        font-family: 'Segoe UI', sans-serif;
+    }
 
-@if (!string.IsNullOrEmpty(Model.HighestCarbonActivityType))
-{
-    <p>Your highest carbon emission category is: <strong>@Model.HighestCarbonActivityType</strong></p>
-}
+    .app {
+        max-width: 420px;
+        margin: auto;
+        background: #f6fbf6;
+        border-radius: 25px;
+        overflow: hidden;
+        box-shadow: 0 10px 25px rgba(0,0,0,0.1);
+    }
 
-@if (Model.RecommendedTips.Any())
-{
-    <div class="d-flex justify-content-between align-items-center">
-        <h2>Recommended for You</h2>
+    /* HEADER */
+    .header {
+        background: #4caf50;
+        color: white;
+        padding: 14px;
+        text-align: center;
+        font-weight: 600;
+        position: relative;
+    }
+
+        .header .left {
+            position: absolute;
+            left: 15px;
+        }
+
+        .header .right {
+            position: absolute;
+            right: 15px;
+        }
+
+    .content {
+        padding: 12px;
+    }
+
+    /* SECTION TITLE */
+    .section-title {
+        font-size: 13px;
+        margin: 12px 0 6px;
+        color: #1b3a1b;
+        border-bottom: 1px solid #c8e6c9;
+        padding-bottom: 3px;
+    }
+
+    /* PROGRESS CARDS */
+    .progress-card {
+        background: #7ed957;
+        padding: 10px;
+        border-radius: 12px;
+        margin-bottom: 8px;
+    }
+
+    .progress-label {
+        display: flex;
+        justify-content: space-between;
+        font-size: 14px;
+        margin-bottom: 6px;
+    }
+
+    .progress-bar-bg {
+        background: #d0e8cf;
+        height: 10px;
+        border-radius: 6px;
+        overflow: hidden;
+    }
+
+    .progress-bar-fill {
+        height: 100%;
+        border-radius: 6px;
+    }
+
+    .travel {
+        background: #3f51b5;
+        width: 80%;
+    }
+
+    .energy {
+        background: #e53935;
+        width: 60%;
+    }
+
+    .general {
+        background: #ff9800;
+        width: 30%;
+    }
+
+    /* LIST ITEMS */
+    .list-item {
+        background: #efe6dc;
+        padding: 12px;
+        border-radius: 10px;
+        margin-bottom: 8px;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        font-size: 14px;
+    }
+
+        .list-item a {
+            text-decoration: none;
+            color: #1b3a1b;
+            width: 100%;
+            display: flex;
+            justify-content: space-between;
+        }
+
+    .arrow {
+        color: #666;
+    }
+
+    /* FOOTER */
+    .footer {
+        background: #e8f5e9;
+        padding: 10px 0;
+        display: flex;
+        justify-content: space-around;
+        border-top: 1px solid #c8e6c9;
+    }
+
+        .footer div {
+            text-align: center;
+            font-size: 12px;
+            color: #2e7d32;
+        }
+</style>
+
+<div class="app">
+
+    <!-- HEADER -->
+    <div class="header">
+        <span class="left">⚙</span>
+        Tips
+        <span class="right">👤</span>
     </div>
 
-    <p>These tips are prioritised based on the category contributing the most CO₂ to your emissions.</p>
+    <div class="content">
 
-    <div class="card mb-3">
+        <!-- BIGGEST REDUCTIONS -->
+        <div class="section-title">Your Biggest Reductions</div>
+
+        <div class="progress-card">
+            <div class="progress-label">
+                <span>Travel</span>
+            </div>
+            <div class="progress-bar-bg">
+                <div class="progress-bar-fill travel"></div>
+            </div>
+        </div>
+
+        <div class="progress-card">
+            <div class="progress-label">
+                <span>Energy</span>
+            </div>
+            <div class="progress-bar-bg">
+                <div class="progress-bar-fill energy"></div>
+            </div>
+        </div>
+
+        <div class="progress-card">
+            <div class="progress-label">
+                <span>General</span>
+            </div>
+            <div class="progress-bar-bg">
+                <div class="progress-bar-fill general"></div>
+            </div>
+        </div>
+
+        <!-- PERSONALISED -->
+        <div class="section-title">Personalised Tips</div>
+
         @foreach (var tip in Model.RecommendedTips)
         {
-            <div class="card-body border-bottom">
-                <h4>@tip.Title</h4>
-                <a asp-page="./Details" asp-route-id="@tip.Id" class="btn btn-primary">View Details</a>
+            <div class="list-item">
+                <a asp-page="./Details" asp-route-id="@tip.Id">
+                    <span>@tip.Title</span>
+                    <span class="arrow">›</span>
+                </a>
             </div>
         }
+
+        <!-- GENERAL -->
+        <div class="section-title">
+            General Tips
+            <a asp-page="./AllTips" style="float:right; font-size:12px;">More</a>
+        </div>
+
+        @foreach (var tip in Model.GeneralTips)
+        {
+            <div class="list-item">
+                <a asp-page="./Details" asp-route-id="@tip.Id">
+                    <span>@tip.Title</span>
+                    <span class="arrow">›</span>
+                </a>
+            </div>
+        }
+
+        <!-- FAQ -->
+        <div class="section-title">
+            FAQ
+            <a asp-page="./AllFaqs" style="float:right; font-size:12px;">More</a>
+        </div>
+
+        @foreach (var faq in Model.FaqItems)
+        {
+            <div class="list-item">
+                <a asp-page="./Details" asp-route-id="@faq.Id">
+                    <span>@faq.Title</span>
+                    <span class="arrow">›</span>
+                </a>
+            </div>
+        }
+
     </div>
-}
 
-<div class="d-flex justify-content-between align-items-center">
-    <h2>More Tips</h2>
-    <a asp-page="./AllTips">See all &gt;</a>
-</div>
+    <!-- FOOTER -->
+    <div class="footer">
+        <div>News</div>
+        <div>Home</div>
+        <div>Tips</div>
+        <div>Profile</div>
+    </div>
 
-<p>Here are some more tips to help you reduce your carbon footprint.</p>
-
-<div class="card mb-3">
-    @foreach (var tip in Model.GeneralTips)
-    {
-        <div class="card-body border-bottom">
-            <h4>@tip.Title</h4>
-            <a asp-page="./Details" asp-route-id="@tip.Id" class="btn btn-primary">View Details</a>
-        </div>
-    }
-</div>
-
-<div class="d-flex justify-content-between align-items-center">
-    <h2>FAQ</h2>
-    <a asp-page="./AllFaqs">See all &gt;</a>
-</div>
-
-<p>Frequently asked questions.</p>
-<div class="card mb-3">
-    @foreach (var faq in Model.FaqItems)
-    {
-        <div class="card-body border-bottom">
-            <h4>@faq.Title</h4>
-            <a asp-page="./Details" asp-route-id="@faq.Id" class="btn btn-primary">View Details</a>
-        </div>
-    }
 </div>

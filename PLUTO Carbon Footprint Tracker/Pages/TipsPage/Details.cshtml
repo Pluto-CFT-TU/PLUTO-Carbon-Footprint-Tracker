@@ -5,32 +5,151 @@
     ViewData["Title"] = "Tip Details";
 }
 
-<h1>@Model.Tip.Title</h1>
+<style>
+    body {
+        background: #eef5ee;
+        font-family: 'Segoe UI', sans-serif;
+    }
 
-@if (Model.Tip.ActivityType != null)
-{
-    <p>
-        <strong>Category:</strong> @Model.Tip.ActivityType.Name
-    </p>
-}
+    .app {
+        max-width: 420px;
+        margin: auto;
+        background: #f6fbf6;
+        border-radius: 25px;
+        overflow: hidden;
+        box-shadow: 0 10px 25px rgba(0,0,0,0.1);
+    }
 
-<div class="card mb-3">
-    <div class="card-body">
-        <p>@Model.Tip.Content</p>
+    /* HEADER */
+    .header {
+        background: #4caf50;
+        color: white;
+        padding: 14px;
+        text-align: center;
+        font-weight: 600;
+        position: relative;
+    }
+
+        .header .back {
+            position: absolute;
+            left: 15px;
+            top: 14px;
+            text-decoration: none;
+            color: white;
+            font-size: 18px;
+        }
+
+        .header .profile {
+            position: absolute;
+            right: 15px;
+            top: 14px;
+        }
+
+    /* CONTENT */
+    .content {
+        padding: 14px;
+    }
+
+    .title {
+        font-size: 18px;
+        font-weight: 600;
+        margin-bottom: 8px;
+        color: #1b3a1b;
+    }
+
+    .category {
+        font-size: 13px;
+        color: #666;
+        margin-bottom: 12px;
+    }
+
+    /* MEDIA */
+    .media-box {
+        background: #ddd;
+        border-radius: 12px;
+        overflow: hidden;
+        margin-bottom: 12px;
+    }
+
+        .media-box iframe {
+            width: 100%;
+            height: 180px;
+            border: none;
+        }
+
+    /* CONTENT BOX */
+    .text-box {
+        background: #ffffff;
+        padding: 12px;
+        border-radius: 12px;
+        font-size: 14px;
+        line-height: 1.5;
+        color: #333;
+        box-shadow: 0 2px 6px rgba(0,0,0,0.05);
+    }
+
+    /* FOOTER */
+    .footer {
+        background: #e8f5e9;
+        padding: 10px 0;
+        display: flex;
+        justify-content: space-around;
+        border-top: 1px solid #c8e6c9;
+        margin-top: 10px;
+    }
+
+        .footer div {
+            text-align: center;
+            font-size: 12px;
+            color: #2e7d32;
+        }
+</style>
+
+<div class="app">
+
+    <!-- HEADER -->
+    <div class="header">
+        <a asp-page="./Index" class="back">←</a>
+        Tips
+        <span class="profile">👤</span>
     </div>
-</div>
 
-@if (!string.IsNullOrWhiteSpace(Model.Tip.VideoUrl))
-{
-    <div class="mb-3">
-        <iframe width="560" height="315"
-                src="@Model.Tip.VideoUrl"
-                frameborder="0"
-                allowfullscreen>
-        </iframe>
+    <div class="content">
+
+        <!-- TITLE -->
+        <div class="title">
+            @Model.Tip.Title
+        </div>
+
+        <!-- CATEGORY -->
+        @if (Model.Tip.ActivityType != null)
+        {
+            <div class="category">
+                @Model.Tip.ActivityType.Name
+            </div>
+        }
+
+        <!-- VIDEO -->
+        @if (!string.IsNullOrWhiteSpace(Model.Tip.VideoUrl))
+        {
+            <div class="media-box">
+                <iframe src="@Model.Tip.VideoUrl" allowfullscreen></iframe>
+            </div>
+        }
+
+        <!-- TEXT -->
+        <div class="text-box">
+            @Model.Tip.Content
+        </div>
+
     </div>
-}
 
-<div>
-    <a asp-page="./Index" class="btn btn-secondary">Back to Tips</a>
+    <!-- FOOTER -->
+    <div class="footer">
+        <div>News</div>
+        <div>Home</div>
+        <div>Tips</div>
+        <div>Profile</div>
+    </div>
+
 </div>
