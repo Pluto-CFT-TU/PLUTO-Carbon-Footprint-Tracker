@@ -11,15 +11,6 @@
         font-family: 'Segoe UI', sans-serif;
     }
 
-    .app {
-        max-width: 420px;
-        margin: auto;
-        background: #f6fbf6;
-        border-radius: 25px;
-        overflow: hidden;
-        box-shadow: 0 10px 25px rgba(0,0,0,0.1);
-    }
-
     /* HEADER */
     .header {
         background: #4caf50;
@@ -93,21 +84,6 @@
         margin-left: 10px;
         object-fit: cover;
     }
-
-    /* FOOTER NAV */
-    .footer {
-        background: #e8f5e9;
-        padding: 10px 0;
-        display: flex;
-        justify-content: space-around;
-        border-top: 1px solid #c8e6c9;
-    }
-
-        .footer div {
-            text-align: center;
-            font-size: 12px;
-            color: #2e7d32;
-        }
 </style>
 
 <div class="app">
@@ -165,7 +141,35 @@
         {
             <div>No news available.</div>
         }
+        <div class="d-flex justify-content-between align-items-center">
+            <h2>More News</h2>
+            <a asp-page="./AllNews">See all &gt;</a>
+        </div>
+        @if (Model.MoreNews.Any())
+        {
+            <!-- LIST -->
+            @foreach (var article in Model.MoreNews)
+            {
+                <a asp-page="./Details" asp-route-id="@article.Id" style="text-decoration:none;">
+                    <div class="news-item">
 
+                        <div class="news-item-text">
+                            @article.Title
+                        </div>
+
+                        @if (!string.IsNullOrWhiteSpace(article.ImageUrl))
+                        {
+                            <img src="@article.ImageUrl" class="news-thumb" />
+                        }
+                        else
+                        {
+                            <div class="news-thumb"></div>
+                        }
+
+                    </div>
+                </a>
+            }
+        }
     </div>
 
 
