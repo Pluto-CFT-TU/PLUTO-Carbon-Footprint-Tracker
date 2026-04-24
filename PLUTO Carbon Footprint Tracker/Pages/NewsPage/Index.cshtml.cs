@@ -30,11 +30,14 @@ namespace PLUTO_Carbon_Footprint_Tracker.Pages.NewsPage
 
             var currentIds = CurrentNews.Select(n => n.Id).ToList();
 
-            MoreNews = await _context.NewsArticles.Where(n => n.IsPublished
-            && !currentIds.Contains(n.Id))
+            var remainingNews = await _context.NewsArticles
+                .Where(n => n.IsPublished && !currentIds.Contains(n.Id))
+                .ToListAsync();
+
+            MoreNews = remainingNews
                 .OrderBy(n => Guid.NewGuid())
                 .Take(4)
-                .ToListAsync();
+                .ToList();
         }
     }
 }
