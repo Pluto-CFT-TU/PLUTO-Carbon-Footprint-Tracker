@@ -4,222 +4,43 @@
     ViewData["Title"] = "Profile";
 }
 
-<div class="mobile-container">
-    <div class="app-header">
-        <a href="javascript:history.back()" class="back-button">
-            <i class="bi bi-arrow-left"></i>
-        </a>
-        <div class="header-content text-center">
-            <h2 class="page-title">My Profile</h2>
-            <div class="profile-avatar-container">
-                <div class="avatar-circle">
-                    <i class="bi bi-person-fill"></i>
-                </div>
-                <div class="username-text">@Model.CurrentUser.Username</div>
-            </div>
-        </div>
+<h1>Profile</h1>
+<div class="card mb-3">
+    <div class="card-body">
+        <h4>Account Information</h4>
+        <p><strong>Username:</strong> @Model.CurrentUser.Username</p>
+        <p><strong>Email:</strong> @Model.CurrentUser.Email</p>
+        <p><strong>Membership:</strong> @Model.CurrentUser.Membership</p>
+        <p><strong>Rank:</strong> @Model.CurrentUser.Rank</p>
+        <p><strong>Joined:</strong> @Model.CurrentUser.CreatedAt.ToString("dd MMM yyyy")</p>
     </div>
-
-    <div class="stats-container d-flex justify-content-around text-center mt-3">
-        <div class="stat-item">
-            <div class="stat-label">Membership:</div>
-            <div class="stat-value">@Model.CurrentUser.Membership</div>
-        </div>
-        <div class="stat-item">
-            <div class="stat-label">Joined:</div>
-            <div class="stat-value">@Model.CurrentUser.CreatedAt.ToString("dd/MM/yyyy")</div>
-        </div>
-        <div class="stat-item">
-            <div class="stat-label">Rank:</div>
-            <div class="stat-value">@Model.CurrentUser.Rank<sup>th</sup></div>
-        </div>
-    </div>
-
-    <div class="menu-list mt-4">
-        <a asp-page="/Profile/Details" class="menu-item">
-            <span>Personal details</span>
-            <i class="bi bi-caret-right-fill"></i>
-        </a>
-        <a asp-page="/Profile/History" class="menu-item">
-            <span>Progress History</span>
-            <i class="bi bi-caret-right-fill"></i>
-        </a>
-        <a asp-page="/SettingsPage/Index" class="menu-item">
-            <span>Settings</span>
-            <i class="bi bi-caret-right-fill"></i>
-        </a>
-    </div>
-
-    <div class="logout-section text-center mt-4">
-        <button class="btn-logout">
-            <i class="bi bi-box-arrow-left"></i> Logout
-        </button>
-    </div>
-
-    <nav class="bottom-nav">
-        <a href="#" class="nav-link-item">
-            <i class="bi bi-newspaper"></i>
-            <span>News</span>
-        </a>
-        <a href="#" class="nav-link-item">
-            <i class="bi bi-house-door-fill"></i>
-            <span>Home</span>
-        </a>
-        <a href="#" class="nav-link-item">
-            <i class="bi bi-chat-dots-fill"></i>
-            <span>Tips</span>
-        </a>
-        <a href="#" class="nav-link-item active">
-            <i class="bi bi-person-circle"></i>
-            <span>Profile</span>
-        </a>
-    </nav>
 </div>
 
-<style>
-    :root {
-        --app-green: #99FF66;
-        --app-bg-light: #FFF5E6;
-        --app-border: #999;
-        --app-text: #333;
-    }
+<div class="card mb-3">
+    <div class="card-body">
+        <h4>Emission Summary</h4>
+        <p><strong>Total Entries Logged:</strong> @Model.TotalEntriesLogged</p>
+        <p><strong>Total CO₂ Logged:</strong> @Model.TotalCarbonLogged.ToString("0.###") kg</p>
+        <p><strong>Highest Carbon Category:</strong> @(Model.HighestCarbonActivityType ?? "No data yet")</p>
+        <hr>
+        <p><strong>Last 7 Days:</strong> @Model.WeeklyTotal.ToString("0.###") kg</p>
+        <p><strong>This Month:</strong> @Model.MonthlyTotal.ToString("0.###") kg</p>
+        <p>
+            <strong>Best Day:</strong>
+            @if (Model.BestDayDate != null)
+            {
+                @Model.BestDayDate.Value.ToString("dd MMM yyyy")
+                <span> (@Model.BestDayCarbon.ToString("0.###") kg)</span>
+            }
+            else
+            {
+                <span>No data yet</span>
+            }
+        </p>
+    </div>
+</div>
 
-    body {
-        background-color: #f0f0f0;
-        font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-    }
+<div>
+    <a asp-page="/SettingsPage/Index" class="btn btn-primary">Go to Settings</a>
+</div>
 
-    /* Mobile Shell */
-    .mobile-container {
-        max-width: 400px;
-        margin: 20px auto;
-        background: linear-gradient(to bottom, var(--app-green) 0%, #ffffff 60%);
-        min-height: 800px;
-        border: 2px solid #333;
-        border-radius: 40px;
-        position: relative;
-        overflow: hidden;
-        padding-bottom: 80px; /* Space for bottom nav */
-    }
-
-    /* Header & Back Button */
-    .app-header {
-        padding: 20px;
-        position: relative;
-    }
-
-    .back-button {
-        position: absolute;
-        top: 20px;
-        left: 20px;
-        font-size: 2rem;
-        color: #333;
-        text-decoration: none;
-    }
-
-    .page-title {
-        font-size: 1.2rem;
-        font-weight: bold;
-        margin-top: 10px;
-    }
-
-    /* Avatar */
-    .avatar-circle {
-        width: 80px;
-        height: 80px;
-        background: var(--app-green);
-        border: 3px solid #000;
-        border-radius: 50%;
-        margin: 10px auto;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        font-size: 2.5rem;
-        box-shadow: 0 4px 6px rgba(0,0,0,0.1);
-    }
-
-    .username-text {
-        font-weight: bold;
-        font-size: 1.1rem;
-    }
-
-    /* Stats Section */
-    .stat-label {
-        font-size: 0.8rem;
-        color: #444;
-    }
-
-    .stat-value {
-        font-weight: bold;
-        font-size: 0.9rem;
-    }
-
-    /* Menu Buttons */
-    .menu-list {
-        padding: 0 25px;
-    }
-
-    .menu-item {
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-        background-color: var(--app-bg-light);
-        border: 1px solid var(--app-border);
-        border-radius: 12px;
-        padding: 15px 20px;
-        margin-bottom: 15px;
-        text-decoration: none;
-        color: #000;
-        font-weight: 500;
-        transition: transform 0.1s;
-    }
-
-        .menu-item:hover {
-            transform: scale(1.02);
-            color: #000;
-        }
-
-        .menu-item i {
-            color: #ccc;
-        }
-
-    /* Logout Button */
-    .btn-logout {
-        border: none;
-        background: transparent;
-        color: #ff4d4d;
-        font-weight: bold;
-        font-size: 1rem;
-    }
-
-    /* Bottom Navigation */
-    .bottom-nav {
-        position: absolute;
-        bottom: 0;
-        width: 100%;
-        height: 70px;
-        background: #fff;
-        border-top: 2px solid #333;
-        display: flex;
-        justify-content: space-around;
-        align-items: center;
-        border-radius: 0 0 38px 38px;
-    }
-
-    .nav-link-item {
-        display: flex;
-        flex-direction: column;
-        align-items: center;
-        text-decoration: none;
-        color: #555;
-        font-size: 0.7rem;
-    }
-
-        .nav-link-item i {
-            font-size: 1.5rem;
-        }
-
-        .nav-link-item.active {
-            color: #4CAF50;
-        }
-</style>
