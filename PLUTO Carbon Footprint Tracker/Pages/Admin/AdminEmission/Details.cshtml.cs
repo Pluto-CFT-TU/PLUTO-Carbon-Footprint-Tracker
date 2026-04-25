@@ -27,13 +27,15 @@ namespace PLUTO_Carbon_Footprint_Tracker.Pages.Admin.AdminEmission
                 return NotFound();
             }
 
-            var activity = await _context.Activities.FirstOrDefaultAsync(m => m.Id == id);
+            var activity = await _context.Activities.Include(a => a.ActivityType)
+                .FirstOrDefaultAsync(m => m.Id == id);
             if (activity == null)
             {
                 return NotFound();
             }
             else
             {
+
                 Activity = activity;
             }
             return Page();
