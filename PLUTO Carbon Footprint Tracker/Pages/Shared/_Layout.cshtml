@@ -25,24 +25,40 @@
                         ?? User.Claims.FirstOrDefault(c => c.Type == "name")?.Value
                         ?? User.Claims.FirstOrDefault(c => c.Type == "email")?.Value
                         ?? "User";
-
-                        <ul class="navbar-nav flex-grow-1">
-                            <li class="nav-item">
-                                <a class="nav-link text-dark" asp-area="" asp-page="/Index">Home</a>
-                            </li>
-                            <li class="nav-item">
-                                <a class="nav-link text-dark" asp-area="" asp-page="/EmissionsLog/Index">Emission Log</a>
-                            </li>
-                            <li class="nav-item">
-                                <a class="nav-link text-dark" asp-area="" asp-page="/TipsPage/Index">Tips</a>
-                            </li>
-                            <li class="nav-item">
-                                <a class="nav-link text-dark" asp-area="" asp-page="/NewsPage/Index">News</a>
-                            </li>
-                            <li class="nav-item">
-                                <a class="nav-link text-dark" asp-area="" asp-page="/UserProfile/Index">Profile</a>
-                            </li>
-                        </ul>
+                        @if (User.IsInRole("Admin"))
+                        {
+                            <ul class="navbar-nav flex-grow-1">
+                                <li class="nav-item">
+                                    <a class="nav-link text-dark" asp-area="" asp-page="/Admin/AdminEmission/Index">Emissions</a>
+                                </li>
+                                <li class="nav-item">
+                                    <a class="nav-link text-dark" asp-area="" asp-page="/Admin/AdminTips/Index">Tips</a>
+                                </li>
+                                <li class="nav-item">
+                                    <a class="nav-link text-dark" asp-area="" asp-page="/Admin/AdminNews/Index">News</a>
+                                </li>
+                            </ul>
+                        }
+                        @if (!User.IsInRole("Admin"))
+                        {
+                            <ul class="navbar-nav flex-grow-1">
+                                <li class="nav-item">
+                                    <a class="nav-link text-dark" asp-area="" asp-page="/Index">Home</a>
+                                </li>
+                                <li class="nav-item">
+                                    <a class="nav-link text-dark" asp-area="" asp-page="/EmissionsLog/Index">Emission Log</a>
+                                </li>
+                                <li class="nav-item">
+                                    <a class="nav-link text-dark" asp-area="" asp-page="/TipsPage/Index">Tips</a>
+                                </li>
+                                <li class="nav-item">
+                                    <a class="nav-link text-dark" asp-area="" asp-page="/NewsPage/Index">News</a>
+                                </li>
+                                <li class="nav-item">
+                                    <a class="nav-link text-dark" asp-area="" asp-page="/UserProfile/Index">Profile</a>
+                                </li>
+                            </ul>
+                        }
                         <span class="navbar-text me-3">
                             Account: <strong>@username</strong>
                         </span>

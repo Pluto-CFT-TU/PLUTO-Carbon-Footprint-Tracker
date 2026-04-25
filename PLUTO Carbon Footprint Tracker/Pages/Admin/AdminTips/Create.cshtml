@@ -1,5 +1,5 @@
 ﻿@page
-@model PLUTO_Carbon_Footprint_Tracker.Pages.TipsPage.CreateModel
+@model PLUTO_Carbon_Footprint_Tracker.Pages.Admin.AdminTips.CreateModel
 
 @{
     ViewData["Title"] = "Create";
@@ -31,6 +31,11 @@
                 <label asp-for="Tips.VideoUrl" class="control-label"></label>
                 <input asp-for="Tips.VideoUrl" class="form-control" />
                 <span asp-validation-for="Tips.VideoUrl" class="text-danger"></span>
+            </div>
+            <div class="form-group form-check">
+                <label class="form-check-label">
+                    <input class="form-check-input" asp-for="Tips.IsFaq" /> @Html.DisplayNameFor(model => model.Tips.IsFaq)
+                </label>
             </div>
             <div class="form-group">
                 <input type="submit" value="Create" class="btn btn-primary" />

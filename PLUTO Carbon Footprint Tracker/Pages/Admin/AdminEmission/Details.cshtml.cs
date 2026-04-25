@@ -1,9 +1,13 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Threading.Tasks;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.EntityFrameworkCore;
 using PLUTO_Carbon_Footprint_Tracker.Data;
 
-namespace PLUTO_Carbon_Footprint_Tracker.Pages.EmissionsLog
+namespace PLUTO_Carbon_Footprint_Tracker.Pages.Admin.AdminEmission
 {
     public class DetailsModel : PageModel
     {
@@ -14,7 +18,7 @@ namespace PLUTO_Carbon_Footprint_Tracker.Pages.EmissionsLog
             _context = context;
         }
 
-        public EmissionEntry EmissionEntry { get; set; } = default!;
+        public Activity Activity { get; set; } = default!;
 
         public async Task<IActionResult> OnGetAsync(int? id)
         {
@@ -23,14 +27,14 @@ namespace PLUTO_Carbon_Footprint_Tracker.Pages.EmissionsLog
                 return NotFound();
             }
 
-            var emissionentry = await _context.EmissionEntries.FirstOrDefaultAsync(m => m.Id == id);
-            if (emissionentry == null)
+            var activity = await _context.Activities.FirstOrDefaultAsync(m => m.Id == id);
+            if (activity == null)
             {
                 return NotFound();
             }
             else
             {
-                EmissionEntry = emissionentry;
+                Activity = activity;
             }
             return Page();
         }

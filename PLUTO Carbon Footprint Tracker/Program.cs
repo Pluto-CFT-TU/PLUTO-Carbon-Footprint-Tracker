@@ -1,4 +1,5 @@
 ﻿using Auth0.AspNetCore.Authentication;
+using Microsoft.IdentityModel.Tokens;
 using PLUTO_Carbon_Footprint_Tracker.Data;
 using PLUTO_Carbon_Footprint_Tracker.Services;
 
@@ -55,7 +56,16 @@ builder.Services
     options.ClientId = builder.Configuration["Auth0:ClientId"];
     options.Scope = "openid profile email";
 });
-
+builder.Services.Configure<Microsoft.AspNetCore.Authentication.OpenIdConnect.OpenIdConnectOptions>(
+Auth0.AspNetCore.Authentication.Auth0Constants.AuthenticationScheme,
+options =>
+{
+    options.TokenValidationParameters = new TokenValidationParameters
+    {
+        RoleClaimType = "https://pluto-carbon-footprint-tracker/roles",
+        NameClaimType = "name"
+    };
+});
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.

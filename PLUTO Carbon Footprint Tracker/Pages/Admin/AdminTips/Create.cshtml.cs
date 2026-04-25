@@ -7,7 +7,7 @@ using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using PLUTO_Carbon_Footprint_Tracker.Data;
 
-namespace PLUTO_Carbon_Footprint_Tracker.Pages.TipsPage
+namespace PLUTO_Carbon_Footprint_Tracker.Pages.Admin.AdminTips
 {
     public class CreateModel : PageModel
     {

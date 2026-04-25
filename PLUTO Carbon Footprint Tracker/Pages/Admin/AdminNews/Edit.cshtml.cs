@@ -8,7 +8,7 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using PLUTO_Carbon_Footprint_Tracker.Data;
 
-namespace PLUTO_Carbon_Footprint_Tracker.Pages.NewsPage
+namespace PLUTO_Carbon_Footprint_Tracker.Pages.Admin.AdminNews
 {
     public class EditModel : PageModel
     {

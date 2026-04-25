@@ -7,7 +7,7 @@ using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using PLUTO_Carbon_Footprint_Tracker.Data;
 
-namespace PLUTO_Carbon_Footprint_Tracker.Pages.NewsPage
+namespace PLUTO_Carbon_Footprint_Tracker.Pages.Admin.AdminEmission
 {
     public class CreateModel : PageModel
     {
@@ -20,11 +20,12 @@ namespace PLUTO_Carbon_Footprint_Tracker.Pages.NewsPage
 
         public IActionResult OnGet()
         {
+        ViewData["ActivityTypeId"] = new SelectList(_context.ActivityTypes, "Id", "Id");
             return Page();
         }
 
         [BindProperty]
-        public NewsArticle NewsArticle { get; set; } = default!;
+        public Activity Activity { get; set; } = default!;
 
         // For more information, see https://aka.ms/RazorPagesCRUD.
         public async Task<IActionResult> OnPostAsync()
@@ -34,7 +35,7 @@ namespace PLUTO_Carbon_Footprint_Tracker.Pages.NewsPage
                 return Page();
             }
 
-            _context.NewsArticles.Add(NewsArticle);
+            _context.Activities.Add(Activity);
             await _context.SaveChangesAsync();
 
             return RedirectToPage("./Index");
