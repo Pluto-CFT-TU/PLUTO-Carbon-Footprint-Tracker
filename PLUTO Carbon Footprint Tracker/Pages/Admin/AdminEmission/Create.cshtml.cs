@@ -1,37 +1,53 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
+﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.AspNetCore.Mvc.Rendering;
+using Microsoft.EntityFrameworkCore;
 using PLUTO_Carbon_Footprint_Tracker.Data;
 
 namespace PLUTO_Carbon_Footprint_Tracker.Pages.Admin.AdminEmission
 {
+    [Authorize(Roles = "Admin")]
     public class CreateModel : PageModel
     {
-        private readonly PLUTO_Carbon_Footprint_Tracker.Data.CFTDBContext _context;
+        private readonly CFTDBContext _context;
 
-        public CreateModel(PLUTO_Carbon_Footprint_Tracker.Data.CFTDBContext context)
+        public CreateModel(CFTDBContext context)
         {
             _context = context;
-        }
-
-        public IActionResult OnGet()
-        {
-        ViewData["ActivityTypeId"] = new SelectList(_context.ActivityTypes, "Id", "Id");
-            return Page();
         }
 
         [BindProperty]
         public Activity Activity { get; set; } = default!;
 
-        // For more information, see https://aka.ms/RazorPagesCRUD.
+        // Select list used to populate the Activity Type dropdown
+        public List<SelectListItem> ActivityTypeItems { get; set; } = [];
+
+        public async Task<IActionResult> OnGetAsync()
+        {
+            ActivityTypeItems = await _context.ActivityTypes.OrderBy(at => at.Name)
+                .Select(at => new SelectListItem
+                {Value = at.Id.ToString(), Text = at.Name}).ToListAsync();
+
+            return Page();
+        }
+
         public async Task<IActionResult> OnPostAsync()
         {
+            ModelState.Remove("Activity.ActivityType");
+            ModelState.Remove("Activity.EmissionEntries");
+
             if (!ModelState.IsValid)
             {
+                ActivityTypeItems = await _context.ActivityTypes
+                    .OrderBy(at => at.Name)
+                    .Select(at => new SelectListItem
+                    {
+                        Value = at.Id.ToString(),
+                        Text = at.Name
+                    })
+                    .ToListAsync();
+
                 return Page();
             }
 
