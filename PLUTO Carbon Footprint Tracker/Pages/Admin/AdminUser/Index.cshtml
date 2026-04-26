@@ -1,0 +1,58 @@
+﻿@page
+@model PLUTO_Carbon_Footprint_Tracker.Pages.Admin.AdminUser.IndexModel
+
+@{
+    ViewData["Title"] = "Index";
+}
+
+<h1>Index</h1>
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.User[0].Email)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.User[0].Username)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.User[0].CreatedAt)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.User[0].UpdatedAt)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.User[0].Membership)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.User[0].Rank)
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+@foreach (var item in Model.User) {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.Email)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Username)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.CreatedAt)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.UpdatedAt)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Membership)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Rank)
+            </td>
+        </tr>
+}
+    </tbody>
+</table>
