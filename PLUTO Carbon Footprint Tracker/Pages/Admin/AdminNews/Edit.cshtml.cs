@@ -1,7 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
+﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.AspNetCore.Mvc.Rendering;
@@ -10,17 +7,20 @@ using PLUTO_Carbon_Footprint_Tracker.Data;
 
 namespace PLUTO_Carbon_Footprint_Tracker.Pages.Admin.AdminNews
 {
+    [Authorize(Roles = "Admin")]
     public class EditModel : PageModel
     {
-        private readonly PLUTO_Carbon_Footprint_Tracker.Data.CFTDBContext _context;
+        private readonly CFTDBContext _context;
 
-        public EditModel(PLUTO_Carbon_Footprint_Tracker.Data.CFTDBContext context)
+        public EditModel(CFTDBContext context)
         {
             _context = context;
         }
 
         [BindProperty]
         public NewsArticle NewsArticle { get; set; } = default!;
+
+        public List<SelectListItem> ImageItems { get; set; } = [];
 
         public async Task<IActionResult> OnGetAsync(int? id)
         {
@@ -29,21 +29,25 @@ namespace PLUTO_Carbon_Footprint_Tracker.Pages.Admin.AdminNews
                 return NotFound();
             }
 
-            var newsarticle =  await _context.NewsArticles.FirstOrDefaultAsync(m => m.Id == id);
-            if (newsarticle == null)
+            var newsArticle = await _context.NewsArticles
+                .FirstOrDefaultAsync(m => m.Id == id);
+
+            if (newsArticle == null)
             {
                 return NotFound();
             }
-            NewsArticle = newsarticle;
+
+            NewsArticle = newsArticle;
+            LoadImageItems();
+
             return Page();
         }
 
-        // To protect from overposting attacks, enable the specific properties you want to bind to.
-        // For more information, see https://aka.ms/RazorPagesCRUD.
         public async Task<IActionResult> OnPostAsync()
         {
             if (!ModelState.IsValid)
             {
+                LoadImageItems();
                 return Page();
             }
 
@@ -59,10 +63,8 @@ namespace PLUTO_Carbon_Footprint_Tracker.Pages.Admin.AdminNews
                 {
                     return NotFound();
                 }
-                else
-                {
-                    throw;
-                }
+
+                throw;
             }
 
             return RedirectToPage("./Index");
@@ -71,6 +73,20 @@ namespace PLUTO_Carbon_Footprint_Tracker.Pages.Admin.AdminNews
         private bool NewsArticleExists(int id)
         {
             return _context.NewsArticles.Any(e => e.Id == id);
+        }
+
+        private void LoadImageItems()
+        {
+            ImageItems = new List<SelectListItem>
+            {
+                new SelectListItem { Value = "", Text = "-- No image --" },
+                new SelectListItem { Value = "/Images/News/Actnow.jpg", Text = "Act Now" },
+                new SelectListItem { Value = "/Images/News/Deforest.jpg", Text = "Deforestation" },
+                new SelectListItem { Value = "/Images/News/Fire.jpg", Text = "Fire" },
+                new SelectListItem { Value = "/Images/News/grassywindmills.jpg", Text = "Windmills" },
+                new SelectListItem { Value = "/Images/News/ice.jpg", Text = "Ice Caps" },
+                new SelectListItem { Value = "/Images/News/Nofuture.jpg", Text = "No Future" }
+            };
         }
     }
 }
