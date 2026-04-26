@@ -84,7 +84,8 @@ namespace PLUTO_Carbon_Footprint_Tracker.Pages.UserProfile
                 BestDayCarbon = bestDay.TotalCarbon;
             }
             MonthlyEmissions = userEntries.Where(e => e.EntryDate.Year == today.Year)
-                .GroupBy(e => e.EntryDate.Month).Select(g => new MonthlyEmissions
+                .GroupBy(e => e.EntryDate.Month)
+                .Select(g => new MonthlyEmissions
                 {
                     MonthName = new DateTime(today.Year, g.Key, 1).ToString("MMMM"),
                     TotalCarbonKg = g.Sum(e => e.CarbonKg)
