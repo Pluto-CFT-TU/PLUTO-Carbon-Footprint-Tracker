@@ -27,7 +27,9 @@ namespace PLUTO_Carbon_Footprint_Tracker.Pages.Admin.AdminTips
                 return NotFound();
             }
 
-            var tips = await _context.Tips.FirstOrDefaultAsync(m => m.Id == id);
+            var tips = await _context.Tips.Include(t => t.ActivityType)
+                .FirstOrDefaultAsync(m => m.Id == id);
+
             if (tips == null)
             {
                 return NotFound();

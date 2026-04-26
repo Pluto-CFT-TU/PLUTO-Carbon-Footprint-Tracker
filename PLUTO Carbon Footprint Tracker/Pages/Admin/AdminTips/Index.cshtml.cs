@@ -1,29 +1,58 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
+﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.EntityFrameworkCore;
 using PLUTO_Carbon_Footprint_Tracker.Data;
+using PLUTO_Carbon_Footprint_Tracker.ViewModels;
 
 namespace PLUTO_Carbon_Footprint_Tracker.Pages.Admin.AdminTips
 {
+    [Authorize(Roles = "Admin")]
     public class IndexModel : PageModel
     {
-        private readonly PLUTO_Carbon_Footprint_Tracker.Data.CFTDBContext _context;
+        private readonly CFTDBContext _context;
 
-        public IndexModel(PLUTO_Carbon_Footprint_Tracker.Data.CFTDBContext context)
+        public IndexModel(CFTDBContext context)
         {
             _context = context;
         }
 
-        public IList<Tips> Tips { get;set; } = default!;
+        [BindProperty(SupportsGet = true)]
+        public string? SearchTerm { get; set; }
 
-        public async Task OnGetAsync()
+        public IList<TipSearchVM> TipItems { get; set; } = new List<TipSearchVM>();
+
+        public async Task<IActionResult> OnGetAsync(string? searchTerm)
         {
-            Tips = await _context.Tips
-                .Include(t => t.ActivityType).ToListAsync();
+            SearchTerm = searchTerm;
+
+            var query = _context.Tips
+                .Include(t => t.ActivityType)
+                .AsQueryable();
+
+            if (!string.IsNullOrWhiteSpace(SearchTerm))
+            {
+                var term = SearchTerm.Trim().ToLower();
+
+                query = query.Where(t =>
+                    t.Title.ToLower().Contains(term) ||
+                    t.Content.ToLower().Contains(term) ||
+                    (t.ActivityType != null && t.ActivityType.Name.ToLower().Contains(term)));
+            }
+
+            TipItems = await query
+                .OrderBy(t => t.IsFaq)
+                .ThenBy(t => t.Title)
+                .Select(t => new TipSearchVM
+                {
+                    Id = t.Id,
+                    Title = t.Title,
+                    ActivityTypeName = t.ActivityType != null ? t.ActivityType.Name : null,
+                    IsFaq = t.IsFaq
+                })
+                .ToListAsync();
+
+            return Page();
         }
     }
 }

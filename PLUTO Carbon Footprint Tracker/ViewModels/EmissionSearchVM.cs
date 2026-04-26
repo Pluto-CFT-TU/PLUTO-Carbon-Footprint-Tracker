@@ -7,5 +7,6 @@
         public string ActivityTypeName { get; set; } = string.Empty;
         public string Unit { get; set; } = string.Empty;
         public decimal EmissionFactor { get; set; }
+        public bool IsActive { get; set; }
     }
 }

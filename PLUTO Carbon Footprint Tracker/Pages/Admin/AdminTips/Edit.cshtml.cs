@@ -1,7 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
+﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.AspNetCore.Mvc.Rendering;
@@ -10,17 +7,20 @@ using PLUTO_Carbon_Footprint_Tracker.Data;
 
 namespace PLUTO_Carbon_Footprint_Tracker.Pages.Admin.AdminTips
 {
+    [Authorize(Roles = "Admin")]
     public class EditModel : PageModel
     {
-        private readonly PLUTO_Carbon_Footprint_Tracker.Data.CFTDBContext _context;
+        private readonly CFTDBContext _context;
 
-        public EditModel(PLUTO_Carbon_Footprint_Tracker.Data.CFTDBContext context)
+        public EditModel(CFTDBContext context)
         {
             _context = context;
         }
 
         [BindProperty]
         public Tips Tips { get; set; } = default!;
+
+        public List<SelectListItem> ActivityTypeItems { get; set; } = [];
 
         public async Task<IActionResult> OnGetAsync(int? id)
         {
@@ -29,22 +29,35 @@ namespace PLUTO_Carbon_Footprint_Tracker.Pages.Admin.AdminTips
                 return NotFound();
             }
 
-            var tips =  await _context.Tips.FirstOrDefaultAsync(m => m.Id == id);
+            var tips = await _context.Tips.FirstOrDefaultAsync(m => m.Id == id);
+
             if (tips == null)
             {
                 return NotFound();
             }
+
             Tips = tips;
-           ViewData["ActivityTypeId"] = new SelectList(_context.ActivityTypes, "Id", "Id");
+
+            ActivityTypeItems = await _context.ActivityTypes.OrderBy(at => at.Name)
+                .Select(at => new SelectListItem { Value = at.Id.ToString(), Text = at.Name })
+                .ToListAsync();
+
             return Page();
         }
 
-        // To protect from overposting attacks, enable the specific properties you want to bind to.
-        // For more information, see https://aka.ms/RazorPagesCRUD.
         public async Task<IActionResult> OnPostAsync()
         {
+            ModelState.Remove("Tips.ActivityType");
+
             if (!ModelState.IsValid)
             {
+                ActivityTypeItems = await _context.ActivityTypes.OrderBy(at => at.Name)
+                    .Select(at => new SelectListItem
+                    {
+                        Value = at.Id.ToString(),
+                        Text = at.Name
+                    }).ToListAsync();
+
                 return Page();
             }
 
@@ -60,10 +73,8 @@ namespace PLUTO_Carbon_Footprint_Tracker.Pages.Admin.AdminTips
                 {
                     return NotFound();
                 }
-                else
-                {
-                    throw;
-                }
+
+                throw;
             }
 
             return RedirectToPage("./Index");

@@ -43,7 +43,8 @@ namespace PLUTO_Carbon_Footprint_Tracker.Pages.Admin.AdminEmission
                     ActivityName = a.Name,
                     ActivityTypeName = a.ActivityType.Name,
                     Unit = a.Unit,
-                    EmissionFactor = a.EmissionFactor
+                    EmissionFactor = a.EmissionFactor,
+                    IsActive = a.IsActive
                 })
                 .ToListAsync();
 

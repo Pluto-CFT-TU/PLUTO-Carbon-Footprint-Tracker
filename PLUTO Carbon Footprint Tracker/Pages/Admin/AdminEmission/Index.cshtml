@@ -32,7 +32,7 @@
                 <th>Activity</th>
                 <th>Unit</th>
                 <th>Emission Factor</th>
-                <th></th>
+                <th>Active</th>
             </tr>
         </thead>
         <tbody>
@@ -43,6 +43,7 @@
                     <td>@item.ActivityName</td>
                     <td>@item.Unit</td>
                     <td>@item.EmissionFactor</td>
+                    <td>@item.IsActive</td>
                     <td>
                         <a asp-page="./Edit" asp-route-id="@item.Id" class="btn btn-primary btn-sm">Edit</a>
                         <a asp-page="./Details" asp-route-id="@item.Id" class="btn btn-secondary btn-sm">Details</a>
