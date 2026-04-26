@@ -38,6 +38,38 @@
             }
         </p>
     </div>
+    <div class="card mb-3">
+        <div class="card-body">
+            <h4>Yearly Progress</h4>
+
+            <p><strong>Total CO₂ This Year:</strong> @Model.YearTotal.ToString("0.###") kg</p>
+
+            @if (Model.MonthlyEmissions.Any())
+            {
+                <table class="table">
+                    <thead>
+                        <tr>
+                            <th>Month</th>
+                            <th>Total CO₂</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var month in Model.MonthlyEmissions)
+                        {
+                            <tr>
+                                <td>@month.MonthName</td>
+                                <td>@month.TotalCarbonKg.ToString("0.###") kg</td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            }
+            else
+            {
+                <p>No monthly data available yet.</p>
+            }
+        </div>
+    </div>
 </div>
 
 <div>

@@ -2,6 +2,7 @@ using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.EntityFrameworkCore;
 using PLUTO_Carbon_Footprint_Tracker.Data;
 using PLUTO_Carbon_Footprint_Tracker.Services;
+using PLUTO_Carbon_Footprint_Tracker.ViewModels;
 
 namespace PLUTO_Carbon_Footprint_Tracker.Pages.UserProfile
 {
@@ -25,7 +26,8 @@ namespace PLUTO_Carbon_Footprint_Tracker.Pages.UserProfile
         public decimal MonthlyTotal { get; set; }
         public DateTime? BestDayDate { get; set; }
         public decimal BestDayCarbon { get; set; }
-
+        public decimal YearTotal { get; set; }
+        public IList<MonthlyEmissions> MonthlyEmissions { get; set; } = new List<MonthlyEmissions>();
         public async Task OnGetAsync()
         {
             var user = await _syncUserDataService.EnsureUserExistsAsync(User);
@@ -65,6 +67,9 @@ namespace PLUTO_Carbon_Footprint_Tracker.Pages.UserProfile
             MonthlyTotal = userEntries.Where(e => e.EntryDate.Month == today.Month &&
             e.EntryDate.Year == today.Year).Sum(e => e.CarbonKg);
 
+            YearTotal = userEntries.Where(e => e.EntryDate.Year == today.Year)
+                .Sum(e => e.CarbonKg);
+
             var bestDay = userEntries.GroupBy(e => e.EntryDate.Date)
                 .Select(g => new
                 {
@@ -78,6 +83,14 @@ namespace PLUTO_Carbon_Footprint_Tracker.Pages.UserProfile
                 BestDayDate = bestDay.Date;
                 BestDayCarbon = bestDay.TotalCarbon;
             }
+            MonthlyEmissions = userEntries.Where(e => e.EntryDate.Year == today.Year)
+                .GroupBy(e => e.EntryDate.Month).Select(g => new MonthlyEmissions
+                {
+                    MonthName = new DateTime(today.Year, g.Key, 1).ToString("MMMM"),
+                    TotalCarbonKg = g.Sum(e => e.CarbonKg)
+                })
+                .OrderBy(m => DateTime.ParseExact(m.MonthName, "MMMM", null).Month)
+                .ToList();
         }
     }
 }
