@@ -25,18 +25,13 @@
             </div>
             <div class="form-group">
                 <label asp-for="NewsArticle.Content" class="control-label"></label>
-                <input asp-for="NewsArticle.Content" class="form-control" />
+                <textarea asp-for="NewsArticle.Content" class="form-control" rows="5"></textarea>
                 <span asp-validation-for="NewsArticle.Content" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <label asp-for="NewsArticle.ImageUrl" class="control-label"></label>
-                <input asp-for="NewsArticle.ImageUrl" class="form-control" />
+                <label asp-for="NewsArticle.ImageUrl" class="control-label">News Image</label>
+                <select asp-for="NewsArticle.ImageUrl" asp-items="Model.ImageItems" class="form-control"></select>
                 <span asp-validation-for="NewsArticle.ImageUrl" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="NewsArticle.PublishedAt" class="control-label"></label>
-                <input asp-for="NewsArticle.PublishedAt" class="form-control" />
-                <span asp-validation-for="NewsArticle.PublishedAt" class="text-danger"></span>
             </div>
             <div class="form-group">
                 <label asp-for="NewsArticle.Category" class="control-label"></label>

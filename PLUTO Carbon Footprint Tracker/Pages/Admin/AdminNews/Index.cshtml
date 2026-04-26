@@ -2,71 +2,67 @@
 @model PLUTO_Carbon_Footprint_Tracker.Pages.Admin.AdminNews.IndexModel
 
 @{
-    ViewData["Title"] = "Index";
+    ViewData["Title"] = "Manage News";
 }
 
-<h1>Index</h1>
+<h1>Manage News</h1>
 
 <p>
-    <a asp-page="Create">Create New</a>
+    <a asp-page="Create" class="btn btn-success">Create New Article</a>
 </p>
-<table class="table">
-    <thead>
-        <tr>
-            <th>
-                @Html.DisplayNameFor(model => model.NewsArticle[0].Title)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.NewsArticle[0].Summary)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.NewsArticle[0].Content)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.NewsArticle[0].ImageUrl)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.NewsArticle[0].PublishedAt)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.NewsArticle[0].Category)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.NewsArticle[0].IsPublished)
-            </th>
-            <th></th>
-        </tr>
-    </thead>
-    <tbody>
-@foreach (var item in Model.NewsArticle) {
-        <tr>
-            <td>
-                @Html.DisplayFor(modelItem => item.Title)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Summary)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Content)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.ImageUrl)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.PublishedAt)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Category)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.IsPublished)
-            </td>
-            <td>
-                <a asp-page="./Edit" asp-route-id="@item.Id">Edit</a> |
-                <a asp-page="./Details" asp-route-id="@item.Id">Details</a> |
-                <a asp-page="./Delete" asp-route-id="@item.Id">Delete</a>
-            </td>
-        </tr>
+
+<form method="get" class="mb-3">
+    <div class="form-group">
+        <label for="searchTerm" class="control-label">Search News</label>
+        <input type="text"
+               id="searchTerm"
+               name="searchTerm"
+               value="@Model.SearchTerm"
+               class="form-control"
+               placeholder="Search title, summary, content, or category..." />
+    </div>
+
+    <div class="form-group mt-2">
+        <input type="submit" value="Search" class="btn btn-primary" />
+        <a asp-page="./Index" class="btn btn-secondary">Clear</a>
+    </div>
+</form>
+
+@if (Model.NewsItems.Any())
+{
+    <div class="card mb-3">
+        @foreach (var article in Model.NewsItems)
+        {
+            <div class="card-body border-bottom">
+                @if (!string.IsNullOrWhiteSpace(article.ImageUrl))
+                {
+                    <img src="@article.ImageUrl"
+                         alt="@article.Title"
+                         class="img-fluid rounded mb-2"
+                         style="max-height: 220px; object-fit: cover; width: 100%;" />
+                }
+
+                <h4>@article.Title</h4>
+
+                <p><strong>Date:</strong> @article.PublishedAt.ToString("dd MMM yyyy")</p>
+
+                @if (!string.IsNullOrWhiteSpace(article.Category))
+                {
+                    <p><strong>Category:</strong> @article.Category</p>
+                }
+
+                <p><strong>Published:</strong> @(article.IsPublished ? "Yes" : "No")</p>
+
+                <p>@article.Summary</p>
+
+                <a asp-page="./Edit" asp-route-id="@article.Id" class="btn btn-primary btn-sm">Edit</a>
+                <a asp-page="./Details" asp-route-id="@article.Id" class="btn btn-secondary btn-sm">Details</a>
+                <a asp-page="./Delete" asp-route-id="@article.Id" class="btn btn-danger btn-sm">Delete</a>
+            </div>
+        }
+    </div>
 }
-    </tbody>
-</table>
+else
+{
+    <p>No news articles found.</p>
+}

@@ -1,7 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
+﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.AspNetCore.Mvc.Rendering;
@@ -9,35 +6,56 @@ using PLUTO_Carbon_Footprint_Tracker.Data;
 
 namespace PLUTO_Carbon_Footprint_Tracker.Pages.Admin.AdminNews
 {
+    [Authorize(Roles = "Admin")]
     public class CreateModel : PageModel
     {
-        private readonly PLUTO_Carbon_Footprint_Tracker.Data.CFTDBContext _context;
+        private readonly CFTDBContext _context;
 
-        public CreateModel(PLUTO_Carbon_Footprint_Tracker.Data.CFTDBContext context)
+        public CreateModel(CFTDBContext context)
         {
             _context = context;
-        }
-
-        public IActionResult OnGet()
-        {
-            return Page();
         }
 
         [BindProperty]
         public NewsArticle NewsArticle { get; set; } = default!;
 
-        // For more information, see https://aka.ms/RazorPagesCRUD.
+        public List<SelectListItem> ImageItems { get; set; } = [];
+
+        public IActionResult OnGet()
+        {
+            LoadImageItems();
+            return Page();
+        }
+
         public async Task<IActionResult> OnPostAsync()
         {
             if (!ModelState.IsValid)
             {
+                LoadImageItems();
                 return Page();
             }
+
+            // Auto set publish date
+            NewsArticle.PublishedAt = DateTime.UtcNow;
 
             _context.NewsArticles.Add(NewsArticle);
             await _context.SaveChangesAsync();
 
             return RedirectToPage("./Index");
+        }
+
+        private void LoadImageItems()
+        {
+            ImageItems = new List<SelectListItem>
+            {
+                new SelectListItem { Value = "", Text = "-- No image --" },
+                new SelectListItem { Value = "/Images/News/Actnow.jpg", Text = "Act Now" },
+                new SelectListItem { Value = "/Images/News/Deforest.jpg", Text = "Deforestation" },
+                new SelectListItem { Value = "/Images/News/Fire.jpg", Text = "Fire" },
+                new SelectListItem { Value = "/Images/News/grassywindmills.jpg", Text = "Windmills" },
+                new SelectListItem { Value = "/Images/News/ice.jpg", Text = "Ice Caps" },
+                new SelectListItem { Value = "/Images/News/Nofuture.jpg", Text = "No Future" }
+            };
         }
     }
 }
