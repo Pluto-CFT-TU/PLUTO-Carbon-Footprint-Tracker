@@ -1,10 +1,40 @@
 ﻿@page
 @model IndexModel
 @{
-    ViewData["Title"] = "Home page";
+    ViewData["Title"] = "Home";
 }
+<div class="text-center mb-4">
+    <img src="~/Images/General/pluto.png" alt="Pluto Carbon Footprint Tracker"
+    style="max-width: 250px; height: auto;" class="mb-3" />
 
-<div class="text-center">
-    <h1 class="display-4">Welcome</h1>
-    <p>Learn about <a href="https://learn.microsoft.com/aspnet/core">building Web apps with ASP.NET Core</a>.</p>
+    <h1 class="display-4">PROJECT PLUTO: Carbon Footprint Tracker</h1>
+
+    <p class="lead">
+        Track your carbon footprint and make smarter environmental choices
+    </p>
+</div>
+
+<div class="row text-center">
+
+    <div class="col-md-4 mb-3">
+        <div class="card p-3">
+            <h4>Log Emissions</h4>
+            <p>Add activities like travel, energy usage, and more.</p>
+        </div>
+    </div>
+
+    <div class="col-md-4 mb-3">
+        <div class="card p-3">
+            <h4>Profile & Stats</h4>
+            <p>See your daily, monthly, and yearly emissions.</p>
+        </div>
+    </div>
+
+    <div class="col-md-4 mb-3">
+        <div class="card p-3">
+            <h4>Tips & Tricks</h4>
+            <p>Learn how to reduce your carbon footprint.</p>
+        </div>
+    </div>
+
 </div>
