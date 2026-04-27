@@ -49,8 +49,9 @@ namespace PLUTO_Carbon_Footprint_Tracker.Pages.Admin.AdminNews
             {
                 return NotFound();
             }
-
+            // Find the article to delete
             var newsarticle = await _context.NewsArticles.FindAsync(id);
+            // If the article exists, delete it
             if (newsarticle != null)
             {
                 NewsArticle = newsarticle;

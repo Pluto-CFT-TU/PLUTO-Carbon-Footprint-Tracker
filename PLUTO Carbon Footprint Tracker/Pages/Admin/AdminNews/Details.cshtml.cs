@@ -28,7 +28,7 @@ namespace PLUTO_Carbon_Footprint_Tracker.Pages.Admin.AdminNews
             {
                 return NotFound();
             }
-
+            // Find the article with the specified ID
             var newsarticle = await _context.NewsArticles.FirstOrDefaultAsync(m => m.Id == id);
             if (newsarticle == null)
             {

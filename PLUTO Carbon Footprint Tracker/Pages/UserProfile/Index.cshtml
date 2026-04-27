@@ -1,73 +1,255 @@
 ﻿@page
 @model PLUTO_Carbon_Footprint_Tracker.Pages.UserProfile.IndexModel
+
 @{
     ViewData["Title"] = "Profile";
 }
 
-<h1>Profile</h1>
-<div class="card mb-3">
-    <div class="card-body">
-        <h4>Account Information</h4>
-        <p><strong>Username:</strong> @Model.CurrentUser.Username</p>
-        <p><strong>Email:</strong> @Model.CurrentUser.Email</p>
-        <p><strong>Membership:</strong> @Model.CurrentUser.Membership</p>
-        <p><strong>Rank:</strong> @Model.CurrentUser.Rank</p>
-        <p><strong>Joined:</strong> @Model.CurrentUser.CreatedAt.ToString("dd MMM yyyy")</p>
-    </div>
-</div>
+<style>
+    body {
+        background: #eef5ee;
+        font-family: 'Segoe UI', sans-serif;
+    }
 
-<div class="card mb-3">
-    <div class="card-body">
-        <h4>Emission Summary</h4>
-        <p><strong>Total Entries Logged:</strong> @Model.TotalEntriesLogged</p>
-        <p><strong>Total CO₂ Logged:</strong> @Model.TotalCarbonLogged.ToString("0.###") kg</p>
-        <p><strong>Highest Carbon Category:</strong> @(Model.HighestCarbonActivityType ?? "No data yet")</p>
-        <hr>
-        <p><strong>Last 7 Days:</strong> @Model.WeeklyTotal.ToString("0.###") kg</p>
-        <p><strong>This Month:</strong> @Model.MonthlyTotal.ToString("0.###") kg</p>
-        <p>
-            <strong>Best Day:</strong>
-            @if (Model.BestDayDate != null)
+    .header {
+        background: #4caf50;
+        color: white;
+        padding: 14px;
+        text-align: center;
+        font-weight: 600;
+        position: relative;
+    }
+
+        .header .left {
+            position: absolute;
+            left: 15px;
+        }
+
+        .header .right {
+            position: absolute;
+            right: 15px;
+        }
+
+
+    .content {
+        padding: 12px;
+    }
+
+    .profile-card {
+        background: white;
+        border-radius: 12px;
+        padding: 14px;
+        margin-bottom: 12px;
+        box-shadow: 0 2px 6px rgba(0,0,0,0.05);
+    }
+
+    .profile-title {
+        font-size: 18px;
+        font-weight: 600;
+        color: #1b3a1b;
+        margin-bottom: 4px;
+    }
+
+    .profile-subtitle {
+        font-size: 13px;
+        color: #666;
+        margin-bottom: 0;
+    }
+
+    .section-title {
+        font-size: 13px;
+        margin: 12px 0 6px;
+        color: #1b3a1b;
+        border-bottom: 1px solid #c8e6c9;
+        padding-bottom: 3px;
+    }
+
+    .stat-grid {
+        display: grid;
+        grid-template-columns: repeat(2, 1fr);
+        gap: 8px;
+        margin-top: 8px;
+    }
+
+    .stat-box {
+        background: #efe6dc;
+        border-radius: 10px;
+        padding: 12px;
+        text-align: center;
+    }
+
+    .stat-value {
+        font-size: 20px;
+        font-weight: 700;
+        color: #2e7d32;
+    }
+
+    .stat-label {
+        font-size: 12px;
+        color: #555;
+        margin-top: 3px;
+    }
+
+    .list-item {
+        background: #efe6dc;
+        padding: 12px;
+        border-radius: 10px;
+        margin-bottom: 8px;
+        font-size: 14px;
+        color: #1b3a1b;
+    }
+
+    .list-row {
+        display: flex;
+        justify-content: space-between;
+        gap: 10px;
+    }
+
+    .muted-text {
+        color: #666;
+        font-size: 13px;
+    }
+
+    .settings-link {
+        display: block;
+        background: #4caf50;
+        color: white;
+        text-align: center;
+        padding: 12px;
+        border-radius: 10px;
+        text-decoration: none;
+        font-weight: 600;
+        margin-top: 12px;
+    }
+
+        .settings-link:hover {
+            color: white;
+            background: #43a047;
+        }
+
+    .footer {
+        background: #e8f5e9;
+        padding: 10px 0;
+        display: flex;
+        justify-content: space-around;
+        border-top: 1px solid #c8e6c9;
+    }
+
+        .footer div {
+            text-align: center;
+            font-size: 12px;
+            color: #2e7d32;
+        }
+</style>
+
+<div class="app">
+
+    <div class="header">
+        Profile
+    </div>
+
+    <div class="content">
+
+        <div class="profile-card">
+            <div class="profile-title">@Model.CurrentUser.Username</div>
+            <p class="profile-subtitle">@Model.CurrentUser.Email</p>
+
+            <div class="stat-grid">
+                <div class="stat-box">
+                    <div class="stat-value">@Model.CurrentUser.Membership</div>
+                    <div class="stat-label">Membership</div>
+                </div>
+
+                <div class="stat-box">
+                    <div class="stat-value">@Model.CurrentUser.Rank</div>
+                    <div class="stat-label">Rank</div>
+                </div>
+            </div>
+
+            <p class="muted-text mt-2">
+                Joined: @Model.CurrentUser.CreatedAt.ToString("dd MMM yyyy")
+            </p>
+        </div>
+
+        <div class="section-title">Emission Summary</div>
+
+        <div class="profile-card">
+            <div class="stat-grid">
+                <div class="stat-box">
+                    <div class="stat-value">@Model.TotalEntriesLogged</div>
+                    <div class="stat-label">Entries Logged</div>
+                </div>
+
+                <div class="stat-box">
+                    <div class="stat-value">@Model.TotalCarbonLogged.ToString("0.###") kg</div>
+                    <div class="stat-label">Total CO₂</div>
+                </div>
+
+                <div class="stat-box">
+                    <div class="stat-value">@Model.WeeklyTotal.ToString("0.###") kg</div>
+                    <div class="stat-label">Last 7 Days</div>
+                </div>
+
+                <div class="stat-box">
+                    <div class="stat-value">@Model.MonthlyTotal.ToString("0.###") kg</div>
+                    <div class="stat-label">This Month</div>
+                </div>
+            </div>
+        </div>
+
+        <div class="section-title">Insights</div>
+
+        <div class="list-item">
+            <div class="list-row">
+                <strong>Highest Category</strong>
+                <span>@(Model.HighestCarbonActivityType ?? "No data yet")</span>
+            </div>
+        </div>
+
+        <div class="list-item">
+            <div class="list-row">
+                <strong>Best Day</strong>
+                @if (Model.BestDayDate != null)
+                {
+                    <span>
+                        @Model.BestDayDate.Value.ToString("dd MMM yyyy")
+                        (@Model.BestDayCarbon.ToString("0.###") kg)
+                    </span>
+                }
+                else
+                {
+                    <span>No data yet</span>
+                }
+            </div>
+        </div>
+
+        <div class="section-title">Yearly Progress</div>
+
+        <div class="profile-card">
+            <div class="stat-box mb-2">
+                <div class="stat-value">@Model.YearTotal.ToString("0.###") kg</div>
+                <div class="stat-label">Total CO₂ This Year</div>
+            </div>
+
+            @if (Model.MonthlyEmissions.Any())
             {
-                @Model.BestDayDate.Value.ToString("dd MMM yyyy")
-                <span> (@Model.BestDayCarbon.ToString("0.###") kg)</span>
+                @foreach (var month in Model.MonthlyEmissions)
+                {
+                    <div class="list-item">
+                        <div class="list-row">
+                            <strong>@month.MonthName</strong>
+                            <span>@month.TotalCarbonKg.ToString("0.###") kg</span>
+                        </div>
+                    </div>
+                }
             }
             else
             {
-                <span>No data yet</span>
+                <p class="muted-text">No monthly data available yet.</p>
             }
-        </p>
-        <hr>
-        <h4>Yearly Progress</h4>
-        <p><strong>Total CO₂ This Year:</strong> @Model.YearTotal.ToString("0.###") kg</p>
-        @if (Model.MonthlyEmissions.Any())
-        {
-            <table class="table">
-                <thead>
-                    <tr>
-                        <th>Month</th>
-                        <th>Total CO₂</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    @foreach (var month in Model.MonthlyEmissions)
-                    {
-                        <tr>
-                            <td>@month.MonthName</td>
-                            <td>@month.TotalCarbonKg.ToString("0.###") kg</td>
-                        </tr>
-                    }
-                </tbody>
-            </table>
-        }
-        else
-        {
-            <p>No monthly data available yet.</p>
-        }
+        </div>
+
+        <a asp-page="/SettingsPage/Index" class="settings-link">Go to Settings</a>
+
     </div>
 </div>
-
-<div>
-    <a asp-page="/SettingsPage/Index" class="btn btn-primary">Go to Settings</a>
-</div>
-

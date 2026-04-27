@@ -30,6 +30,8 @@ namespace PLUTO_Carbon_Footprint_Tracker.Pages.Admin.AdminEmission
                 return NotFound();
             }
 
+            // Load the activity along with its related ActivityType to ensure we
+            // have all necessary data for the confirmation page.
             var activity = await _context.Activities.Include(a => a.ActivityType)
                 .FirstOrDefaultAsync(m => m.Id == id);
             if (activity == null)
@@ -49,7 +51,7 @@ namespace PLUTO_Carbon_Footprint_Tracker.Pages.Admin.AdminEmission
             {
                 return NotFound();
             }
-
+            // Find the activity by ID. If it exists, remove it from the database and save changes.
             var activity = await _context.Activities.FindAsync(id);
             if (activity != null)
             {

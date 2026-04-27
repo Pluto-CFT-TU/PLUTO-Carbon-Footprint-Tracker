@@ -16,16 +16,18 @@ namespace PLUTO_Carbon_Footprint_Tracker.Services
 
         public async Task<User?> EnsureUserExistsAsync(ClaimsPrincipal principal)
         {
+            // Log all claims for debugging
             if (principal?.Identity?.IsAuthenticated != true)
             {
                 _logger.LogWarning("User is not authenticated.");
                 return null;
             }
+            // Try to get the Auth0 user ID from the claims
             var auth0UserId = principal.Claims.FirstOrDefault(c => c.Type == "sub")?.Value ??
                 principal.Claims.FirstOrDefault(c => c.Type == ClaimTypes.NameIdentifier)?.Value;
-
+            // If the Auth0 user ID can't be found, log a warning and return null
             if (string.IsNullOrWhiteSpace(auth0UserId))
-            {
+            {                
                 _logger.LogWarning("No Auth0 user ID claim found.");
                 foreach (var claim in principal.Claims)
                 {
@@ -34,7 +36,7 @@ namespace PLUTO_Carbon_Footprint_Tracker.Services
 
                 return null;
             }
-
+            // Retrieve email from the claims
             var email = principal.Claims.FirstOrDefault(c => c.Type == ClaimTypes.Email)?.Value ??
                 principal.Claims.FirstOrDefault(c => c.Type == "email")?.Value ??
                 string.Empty;
@@ -44,12 +46,14 @@ namespace PLUTO_Carbon_Footprint_Tracker.Services
                 ?? principal.Claims.FirstOrDefault(c => c.Type == "email")?.Value?.Split('@')[0]
                 ?? "User";
 
+            // Log the extracted values for debugging
             _logger.LogInformation("Auth0UserId: {Auth0UserId}", auth0UserId);
             _logger.LogInformation("Email: {Email}", email);
             _logger.LogInformation("Username: {Username}", username);
 
+            // Check if a user with the given Auth0 user ID already exists in the database
             var user = await _context.Users.FirstOrDefaultAsync(u => u.Auth0UserId == auth0UserId);
-
+            // If the user doesn't exist, create a new one. Otherwise, update the existing user's email and username.
             if (user == null)
             {
                 user = new User
@@ -71,7 +75,7 @@ namespace PLUTO_Carbon_Footprint_Tracker.Services
                 user.UpdatedAt = DateTime.UtcNow;
                 _logger.LogInformation("Updating existing user.");
             }
-
+            // Save changes to the database and log the result
             var changes = await _context.SaveChangesAsync();
             _logger.LogInformation("SaveChangesAsync result: {Changes}", changes);
             return user;

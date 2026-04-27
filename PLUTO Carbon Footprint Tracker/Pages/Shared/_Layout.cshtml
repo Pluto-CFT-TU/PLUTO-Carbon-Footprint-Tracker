@@ -1,81 +1,145 @@
-﻿<!DOCTYPE html>
+﻿@using PLUTO_Carbon_Footprint_Tracker.Data
+@using System.Security.Claims
+@inject CFTDBContext Context
+
+@{
+    var fontSize = 16;
+    var colourBlindMode = "None";
+    var highContrast = false;
+    var username = "User";
+
+    if (User.Identity?.IsAuthenticated == true)
+    {
+        var auth0UserId = User.Claims.FirstOrDefault(c => c.Type == "sub")?.Value
+            ?? User.Claims.FirstOrDefault(c => c.Type == ClaimTypes.NameIdentifier)?.Value;
+
+        var user = Context.Users.FirstOrDefault(u => u.Auth0UserId == auth0UserId);
+
+        if (user != null)
+        {
+            username = !string.IsNullOrWhiteSpace(user.Username)
+                ? user.Username
+                : "User";
+
+            var settings = Context.Settings.FirstOrDefault(s => s.UserId == user.Id);
+
+            if (settings != null)
+            {
+                fontSize = settings.FontSize;
+                colourBlindMode = settings.ColourBlindMode ?? "None";
+                highContrast = settings.HighContrast;
+            }
+        }
+    }
+
+    var accessibilityClass = "";
+
+    if (highContrast)
+    {
+        accessibilityClass += " high-contrast";
+    }
+
+    if (colourBlindMode == "Protanopia")
+    {
+        accessibilityClass += " protanopia-mode";
+    }
+    else if (colourBlindMode == "Deuteranopia")
+    {
+        accessibilityClass += " deuteranopia-mode";
+    }
+    else if (colourBlindMode == "Tritanopia")
+    {
+        accessibilityClass += " tritanopia-mode";
+    }
+}
+
+<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>@ViewData["Title"] - Project Pluto: CFT</title>
+
     <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
     <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
     <link rel="stylesheet" href="~/PLUTO_Carbon_Footprint_Tracker.styles.css" asp-append-version="true" />
 </head>
-<body>
+
+<body class="@accessibilityClass" style="font-size:@(fontSize)px">
     <header>
         <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light bg-white border-bottom box-shadow mb-3">
             <div class="container">
-                <a class="navbar-brand d-flex align-items-center" asp-area="Project Pluto: CFT" asp-page="/Index">
-                    <img src="~/Images/General/pluto.png" alt="" style="max-width: 70px; height: 50px;" class="nav-logo me-2" />
+                <a class="navbar-brand d-flex align-items-center" asp-area="" asp-page="/Index">
+                    <img src="~/Images/General/pluto.png"
+                         alt="Project Pluto Logo"
+                         class="nav-logo me-2" />
                 </a>
-                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target=".navbar-collapse" aria-controls="navbarSupportedContent"
-                        aria-expanded="false" aria-label="Toggle navigation">
+
+                <button class="navbar-toggler"
+                        type="button"
+                        data-bs-toggle="collapse"
+                        data-bs-target=".navbar-collapse"
+                        aria-controls="navbarSupportedContent"
+                        aria-expanded="false"
+                        aria-label="Toggle navigation">
                     <span class="navbar-toggler-icon"></span>
                 </button>
+
                 <div class="navbar-collapse collapse d-sm-inline-flex justify-content-between">
-                    @if (User.Identity.IsAuthenticated)
+                    @if (User.Identity?.IsAuthenticated == true)
                     {
-                        var username = User.Claims.FirstOrDefault(c => c.Type == "nickname")?.Value
-                        ?? User.Claims.FirstOrDefault(c => c.Type == "name")?.Value
-                        ?? User.Claims.FirstOrDefault(c => c.Type == "email")?.Value?.Split('@')[0]
                         ?? "User";
                         @if (User.IsInRole("Admin"))
                         {
                             <ul class="navbar-nav flex-grow-1">
                                 <li class="nav-item">
-                                    <a class="nav-link text-dark" asp-area="" asp-page="/Admin/AdminEmission/Index">Emissions</a>
+                                    <a class="nav-link text-dark" asp-page="/Admin/AdminEmission/Index">Emissions</a>
                                 </li>
                                 <li class="nav-item">
-                                    <a class="nav-link text-dark" asp-area="" asp-page="/Admin/AdminTips/Index">Tips</a>
+                                    <a class="nav-link text-dark" asp-page="/Admin/AdminTips/Index">Tips</a>
                                 </li>
                                 <li class="nav-item">
-                                    <a class="nav-link text-dark" asp-area="" asp-page="/Admin/AdminNews/Index">News</a>
+                                    <a class="nav-link text-dark" asp-page="/Admin/AdminNews/Index">News</a>
                                 </li>
                                 <li class="nav-item">
-                                    <a class="nav-link text-dark" asp-area="" asp-page="/Admin/AdminUser/Index">Users</a>
+                                    <a class="nav-link text-dark" asp-page="/Admin/AdminUser/Index">Users</a>
                                 </li>
                                 <li class="nav-item">
-                                    <a class="nav-link text-dark" asp-area="" asp-page="/Admin/AdminActivityType/Index">Activity Type</a>
+                                    <a class="nav-link text-dark" asp-page="/Admin/AdminActivityType/Index">Activity Type</a>
                                 </li>
                             </ul>
                         }
-                        @if (!User.IsInRole("Admin"))
+                        else
                         {
                             <ul class="navbar-nav flex-grow-1">
                                 <li class="nav-item">
-                                    <a class="nav-link text-dark" asp-area="" asp-page="/Index">Home</a>
+                                    <a class="nav-link text-dark" asp-page="/Index">Home</a>
                                 </li>
                                 <li class="nav-item">
-                                    <a class="nav-link text-dark" asp-area="" asp-page="/EmissionsLog/Index">Emission Log</a>
+                                    <a class="nav-link text-dark" asp-page="/EmissionsLog/Index">Emission Log</a>
                                 </li>
                                 <li class="nav-item">
-                                    <a class="nav-link text-dark" asp-area="" asp-page="/TipsPage/Index">Tips</a>
+                                    <a class="nav-link text-dark" asp-page="/TipsPage/Index">Tips</a>
                                 </li>
                                 <li class="nav-item">
-                                    <a class="nav-link text-dark" asp-area="" asp-page="/NewsPage/Index">News</a>
+                                    <a class="nav-link text-dark" asp-page="/NewsPage/Index">News</a>
                                 </li>
                                 <li class="nav-item">
-                                    <a class="nav-link text-dark" asp-area="" asp-page="/UserProfile/Index">Profile</a>
+                                    <a class="nav-link text-dark" asp-page="/UserProfile/Index">Profile</a>
                                 </li>
                                 <li class="nav-item">
-                                    <a class="nav-link text-dark" asp-area="" asp-page="/SettingsPage/Index">Settings</a>
+                                    <a class="nav-link text-dark" asp-page="/SettingsPage/Index">Settings</a>
                                 </li>
                             </ul>
                         }
+
                         <span class="navbar-text me-3">
                             Account: <strong>@username</strong>
                         </span>
+
                         <ul class="navbar-nav ms-auto">
                             <li class="nav-item">
-                                <a class="nav-link text-dark" asp-area=""
-                                   asp-page="/Account/Logout">Logout</a>
+                                <a class="nav-link text-dark" asp-page="/Account/Logout">Logout</a>
                             </li>
                         </ul>
                     }
@@ -83,8 +147,7 @@
                     {
                         <ul class="navbar-nav ms-auto">
                             <li class="nav-item">
-                                <a class="nav-link text-dark" asp-area=""
-                                   asp-page="/Account/Login">Login</a>
+                                <a class="nav-link text-dark" asp-page="/Account/Login">Login</a>
                             </li>
                         </ul>
                     }
@@ -92,15 +155,17 @@
             </div>
         </nav>
     </header>
-    <div class="container">
+
+    <div class="container page-container">
         <main role="main" class="pb-3">
             @RenderBody()
         </main>
     </div>
 
-    <footer class="border-top footer text-muted">
+    <footer class="border-top footer text-muted site-footer">
         <div class="container">
-            &copy; 2026 - PLUTO_Carbon_Footprint_Tracker - <a asp-area="" asp-page="/Privacy">Privacy</a>
+            &copy; 2026 - PLUTO_Carbon_Footprint_Tracker -
+            <a asp-area="" asp-page="/Privacy">Privacy</a>
         </div>
     </footer>
 

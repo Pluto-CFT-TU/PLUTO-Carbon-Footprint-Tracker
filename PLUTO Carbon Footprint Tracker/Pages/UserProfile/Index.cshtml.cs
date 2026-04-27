@@ -30,23 +30,28 @@ namespace PLUTO_Carbon_Footprint_Tracker.Pages.UserProfile
         public IList<MonthlyEmissions> MonthlyEmissions { get; set; } = new List<MonthlyEmissions>();
         public async Task OnGetAsync()
         {
+            // Ensure the user exists in the database and retrieve their data
             var user = await _syncUserDataService.EnsureUserExistsAsync(User);
             if (user == null)
             {
                 return;
             }
 
+            // Set the current user for use in the Razor Page
             CurrentUser = user;
 
+            // Get today's date for filtering entries
             var today = DateTime.UtcNow.Date;
 
-            var userEntries = await _context.EmissionEntries
-                .Where(e => e.UserId == user.Id).Include(e => e.Activity)
-                .ThenInclude(a => a.ActivityType).ToListAsync();
+            // Load the user's emission entries along with their activities and activity types
+            var userEntries = await _context.EmissionEntries.Where(e => e.UserId == user.Id)
+                .Include(e => e.Activity).ThenInclude(a => a.ActivityType).ToListAsync();
 
+            // Calculate the total number of entries and total carbon logged
             TotalEntriesLogged = userEntries.Count;
             TotalCarbonLogged = userEntries.Sum(e => e.CarbonKg);
 
+            // Determine the activity type with the highest total carbon emissions
             var highestCarbonActivity = userEntries
                 .GroupBy(e => e.Activity.ActivityType.Name)
                 .Select(g => new
@@ -56,11 +61,13 @@ namespace PLUTO_Carbon_Footprint_Tracker.Pages.UserProfile
                 })
                 .OrderByDescending(g => g.TotalCarbon).FirstOrDefault();
 
+            // If there is a highest carbon activity, set the corresponding property
             if (highestCarbonActivity != null)
             {
                 HighestCarbonActivityType = highestCarbonActivity.ActivityTypeName;
             }
 
+            // Calculate weekly, monthly, and yearly totals
             WeeklyTotal = userEntries.Where(e => e.EntryDate.Date >= today.AddDays(-6))
                 .Sum(e => e.CarbonKg);
 
@@ -70,6 +77,7 @@ namespace PLUTO_Carbon_Footprint_Tracker.Pages.UserProfile
             YearTotal = userEntries.Where(e => e.EntryDate.Year == today.Year)
                 .Sum(e => e.CarbonKg);
 
+            // Identify the best day (the day with the lowest total carbon emissions)
             var bestDay = userEntries.GroupBy(e => e.EntryDate.Date)
                 .Select(g => new
                 {
@@ -78,11 +86,13 @@ namespace PLUTO_Carbon_Footprint_Tracker.Pages.UserProfile
                 })
                 .OrderBy(g => g.TotalCarbon).FirstOrDefault();
 
+            // If there is a best day, set the corresponding properties
             if (bestDay != null)
             {
                 BestDayDate = bestDay.Date;
                 BestDayCarbon = bestDay.TotalCarbon;
             }
+            // Prepare monthly emissions data for the current year
             MonthlyEmissions = userEntries.Where(e => e.EntryDate.Year == today.Year)
                 .GroupBy(e => e.EntryDate.Month)
                 .Select(g => new MonthlyEmissions

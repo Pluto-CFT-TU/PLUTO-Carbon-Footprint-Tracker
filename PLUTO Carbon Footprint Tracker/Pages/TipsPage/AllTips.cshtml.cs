@@ -15,6 +15,7 @@ namespace PLUTO_Carbon_Footprint_Tracker.Pages.TipsPage
             _context = context;
         }
 
+        // Bind the SearchTerm property to allow it to be set from query string parameters on GET requests
         [BindProperty(SupportsGet = true)]
         public string? SearchTerm { get; set; }
 
@@ -22,30 +23,31 @@ namespace PLUTO_Carbon_Footprint_Tracker.Pages.TipsPage
 
         public async Task<IActionResult> OnGetAsync(string? searchTerm)
         {
+            // Set the SearchTerm property to the incoming searchTerm parameter
             SearchTerm = searchTerm;
+            // Start with a query that includes the related ActivityType and filters out FAQs
+            var query = _context.Tips.Include(t => t.ActivityType).Where(t => !t.IsFaq).AsQueryable();
 
-            var query = _context.Tips.Include(t => t.ActivityType).Where(t => !t.IsFaq)
-                .AsQueryable();
-
+            // If a search term is provided, filter the query to include tips where the title,
+            // content, or activity type name contains the search term
             if (!string.IsNullOrWhiteSpace(SearchTerm))
             {
+                // Convert the search term to lowercase for case-insensitive comparison
                 var term = SearchTerm.Trim().ToLower();
-
+                // Filter the query based on the search term
                 query = query.Where(t => t.Title.ToLower().Contains(term) ||
                 t.Content.ToLower().Contains(term) ||
                 (t.ActivityType != null && t.ActivityType.Name.ToLower().Contains(term)));
             }
-
-            TipItems = await query
-                .OrderBy(t => t.Title)
+            // Execute the query and project the results into the TipSearchVM view model
+            TipItems = await query.OrderBy(t => t.Title)
                 .Select(t => new TipSearchVM
                 {
                     Id = t.Id,
                     Title = t.Title,
                     ActivityTypeName = t.ActivityType != null ? t.ActivityType.Name : null,
                     IsFaq = t.IsFaq
-                })
-                .ToListAsync();
+                }).ToListAsync();
 
             return Page();
         }

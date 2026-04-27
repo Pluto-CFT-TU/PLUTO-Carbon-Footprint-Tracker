@@ -22,6 +22,7 @@ namespace PLUTO_Carbon_Footprint_Tracker.Pages.Admin.AdminUser
 
         public async Task OnGetAsync()
         {
+            // Fetch all users from the database and store them in the User property
             User = await _context.Users.ToListAsync();
         }
     }

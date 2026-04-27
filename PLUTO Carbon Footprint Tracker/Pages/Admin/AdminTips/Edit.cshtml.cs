@@ -28,16 +28,16 @@ namespace PLUTO_Carbon_Footprint_Tracker.Pages.Admin.AdminTips
             {
                 return NotFound();
             }
-
+            // Fetch the tip from the database
             var tips = await _context.Tips.FirstOrDefaultAsync(m => m.Id == id);
 
             if (tips == null)
             {
                 return NotFound();
             }
-
+            // Load the tip data into the page model
             Tips = tips;
-
+            // Load activity types for the dropdown
             ActivityTypeItems = await _context.ActivityTypes.OrderBy(at => at.Name)
                 .Select(at => new SelectListItem { Value = at.Id.ToString(), Text = at.Name })
                 .ToListAsync();
@@ -47,10 +47,14 @@ namespace PLUTO_Carbon_Footprint_Tracker.Pages.Admin.AdminTips
 
         public async Task<IActionResult> OnPostAsync()
         {
+            // Remove validation for ActivityType since it's a dropdown and will always have
+            // a value (even if it's an empty string)
             ModelState.Remove("Tips.ActivityType");
-
+            // Validate required fields
             if (!ModelState.IsValid)
             {
+                // If validation fails, reload the activity types for the dropdown
+                // and return to the page
                 ActivityTypeItems = await _context.ActivityTypes.OrderBy(at => at.Name)
                     .Select(at => new SelectListItem
                     {

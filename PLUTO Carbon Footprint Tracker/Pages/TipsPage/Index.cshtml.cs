@@ -23,36 +23,34 @@ namespace PLUTO_Carbon_Footprint_Tracker.Pages.TipsPage
 
         public async Task OnGetAsync()
         {
+            // Ensure the user exists in our database and load their data
             var user = await _syncUserDataService.EnsureUserExistsAsync(User);
             if (user == null)
             {
                 return;
             }
 
-            // Load the user's entries first
-            var userEntries = await _context.EmissionEntries
-                .Where(e => e.UserId == user.Id)
-                .Include(e => e.Activity)
-                .ThenInclude(a => a.ActivityType)
-                .ToListAsync();
+            // Load the user's emission entries along with their activities and activity types
+            var userEntries = await _context.EmissionEntries.Where(e => e.UserId == user.Id)
+                .Include(e => e.Activity).ThenInclude(a => a.ActivityType).ToListAsync();
 
-            // Find the activity type with the highest total carbon
-            var highestCarbonActivity = userEntries
-                .GroupBy(e => e.Activity.ActivityType.Name)
+            // Group entries by activity type and calculate total carbon for each type
+            var highestCarbonActivity = userEntries.GroupBy(e => e.Activity.ActivityType.Name)
                 .Select(g => new
                 {
                     ActivityTypeName = g.Key,
                     TotalCarbon = g.Sum(e => e.CarbonKg)
                 })
-                .OrderByDescending(g => g.TotalCarbon)
-                .FirstOrDefault();
+                .OrderByDescending(g => g.TotalCarbon).FirstOrDefault();
 
+            // Get tips related to the highest carbon activity type
             List<int> recommendedIds = new();
 
+            // If we have a highest carbon activity type, get tips related to it
             if (highestCarbonActivity != null)
             {
                 HighestCarbonActivityType = highestCarbonActivity.ActivityTypeName;
-
+                // Get tips related to the highest carbon activity type
                 RecommendedTips = await _context.Tips
                     .Include(t => t.ActivityType)
                     .Where(t => !t.IsFaq &&
@@ -61,11 +59,11 @@ namespace PLUTO_Carbon_Footprint_Tracker.Pages.TipsPage
                     .OrderBy(t => t.Title)
                     .Take(5)
                     .ToListAsync();
-
+                // Collect the IDs of the recommended tips to exclude them from the general tips
                 recommendedIds = RecommendedTips.Select(t => t.Id).ToList();
             }
 
-            // Load more tips not already shown
+            // Get general tips that are not FAQs and not already recommended
             GeneralTips = await _context.Tips
                 .Include(t => t.ActivityType)
                 .Where(t => !t.IsFaq &&
@@ -73,7 +71,7 @@ namespace PLUTO_Carbon_Footprint_Tracker.Pages.TipsPage
                 .OrderBy(t => t.Title)
                 .Take(4)
                 .ToListAsync();
-
+            // Get FAQ items
             FaqItems = await _context.Tips
                 .Where(t => t.IsFaq)
                 .OrderBy(t => t.Title)

@@ -29,6 +29,7 @@ namespace PLUTO_Carbon_Footprint_Tracker.Pages.Admin.AdminNews
 
         public async Task<IActionResult> OnPostAsync()
         {
+            // Validate required fields
             if (!ModelState.IsValid)
             {
                 LoadImageItems();
@@ -38,14 +39,17 @@ namespace PLUTO_Carbon_Footprint_Tracker.Pages.Admin.AdminNews
             // Auto set publish date
             NewsArticle.PublishedAt = DateTime.UtcNow;
 
+            // Save the new article to the database
             _context.NewsArticles.Add(NewsArticle);
             await _context.SaveChangesAsync();
 
             return RedirectToPage("./Index");
         }
 
+        // Load predefined image options for the dropdown
         private void LoadImageItems()
         {
+            // Predefined list of image options for the dropdown
             ImageItems = new List<SelectListItem>
             {
                 new SelectListItem { Value = "", Text = "-- No image --" },

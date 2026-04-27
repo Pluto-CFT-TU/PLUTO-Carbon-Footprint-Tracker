@@ -5,80 +5,160 @@
     ViewData["Title"] = "Settings";
 }
 
-<h1>Settings</h1>
+<style>
+    body {
+        background: #eef5ee;
+        font-family: 'Segoe UI', sans-serif;
+    }
 
-<form method="post">
-    <div asp-validation-summary="All" class="text-danger"></div>
+    /* HEADER (no icons as requested) */
+    .header {
+        background: #4caf50;
+        color: white;
+        padding: 14px;
+        text-align: center;
+        font-weight: 600;
+    }
 
-    <input type="hidden" asp-for="Settings.Id" />
-    <input type="hidden" asp-for="Settings.UserId" />
+    .content {
+        padding: 12px;
+    }
 
-    <div class="card mb-3">
-        <div class="card-body">
-            <h4>Privacy Preferences</h4>
+    .section-title {
+        font-size: 13px;
+        margin: 12px 0 6px;
+        color: #1b3a1b;
+        border-bottom: 1px solid #c8e6c9;
+        padding-bottom: 3px;
+    }
 
-            <div class="form-check mb-2">
-                <input asp-for="Settings.AllowAnalytics" class="form-check-input" />
-                <label asp-for="Settings.AllowAnalytics" class="form-check-label">
-                    Allow analytics
-                </label>
-            </div>
+    .card-style {
+        background: #efe6dc;
+        padding: 12px;
+        border-radius: 10px;
+        margin-bottom: 10px;
+    }
 
-            <div class="form-check mb-2">
-                <input asp-for="Settings.AllowMarketingEmails" class="form-check-input" />
-                <label asp-for="Settings.AllowMarketingEmails" class="form-check-label">
-                    Allow marketing emails
-                </label>
-            </div>
-        </div>
+    .form-check {
+        margin-bottom: 8px;
+    }
+
+    select {
+        width: 100%;
+        padding: 6px;
+        border-radius: 6px;
+        border: none;
+    }
+
+    .btn-save {
+        width: 100%;
+        background: #4caf50;
+        color: white;
+        border: none;
+        padding: 12px;
+        border-radius: 10px;
+        font-weight: 600;
+        margin-top: 10px;
+    }
+
+        .btn-save:hover {
+            background: #43a047;
+        }
+
+    .btn-back {
+        width: 100%;
+        display: block;
+        text-align: center;
+        margin-top: 8px;
+        text-decoration: none;
+        color: #2e7d32;
+        font-weight: 500;
+    }
+
+    .footer {
+        background: #e8f5e9;
+        padding: 10px 0;
+        display: flex;
+        justify-content: space-around;
+        border-top: 1px solid #c8e6c9;
+    }
+
+        .footer div {
+            text-align: center;
+            font-size: 12px;
+            color: #2e7d32;
+        }
+</style>
+
+<div class="app">
+
+    <div class="header">
+        Settings
     </div>
 
-    <div class="card mb-3">
-        <div class="card-body">
-            <h4>Accessibility</h4>
+    <div class="content">
 
-            <div class="form-group mb-3">
-                <label asp-for="Settings.FontSize" class="control-label">Font Size</label>
-                <select asp-for="Settings.FontSize" class="form-control">
+        <form method="post">
+            <div asp-validation-summary="All" class="text-danger"></div>
+
+            <input type="hidden" asp-for="Settings.Id" />
+            <input type="hidden" asp-for="Settings.UserId" />
+
+            <div class="section-title">Privacy Preferences</div>
+
+            <div class="card-style">
+                <div class="form-check">
+                    <input asp-for="Settings.AllowAnalytics" class="form-check-input" />
+                    <label asp-for="Settings.AllowAnalytics">Allow analytics</label>
+                </div>
+
+                <div class="form-check">
+                    <input asp-for="Settings.AllowMarketingEmails" class="form-check-input" />
+                    <label asp-for="Settings.AllowMarketingEmails">Allow marketing emails</label>
+                </div>
+            </div>
+
+            <div class="section-title">Accessibility</div>
+
+            <div class="card-style">
+
+                <label>Font Size</label>
+                <select asp-for="Settings.FontSize">
                     <option value="14">Small</option>
                     <option value="16">Medium</option>
                     <option value="20">Large</option>
                     <option value="24">Extra Large</option>
                 </select>
-            </div>
 
-            <div class="form-check mb-2">
-                <input asp-for="Settings.HighContrast" class="form-check-input" />
-                <label asp-for="Settings.HighContrast" class="form-check-label">
-                    High contrast mode
-                </label>
-            </div>
+                <div class="form-check mt-2">
+                    <input asp-for="Settings.HighContrast" class="form-check-input" />
+                    <label asp-for="Settings.HighContrast">High contrast mode</label>
+                </div>
 
-            <div class="form-check mb-2">
-                <input asp-for="Settings.TextToSpeech" class="form-check-input" />
-                <label asp-for="Settings.TextToSpeech" class="form-check-label">
-                    Text-to-speech enabled
-                </label>
-            </div>
+                <div class="form-check">
+                    <input asp-for="Settings.TextToSpeech" class="form-check-input" />
+                    <label asp-for="Settings.TextToSpeech">Text-to-speech enabled</label>
+                </div>
 
-            <div class="form-group mb-3">
-                <label asp-for="Settings.ColourBlindMode" class="control-label">Colour Blind Mode</label>
-                <select asp-for="Settings.ColourBlindMode" class="form-control">
+                <label class="mt-2">Colour Blind Mode</label>
+                <select asp-for="Settings.ColourBlindMode">
                     <option value="None">None</option>
                     <option value="Protanopia">Protanopia</option>
                     <option value="Deuteranopia">Deuteranopia</option>
                     <option value="Tritanopia">Tritanopia</option>
                 </select>
             </div>
-        </div>
+
+            <button type="submit" class="btn-save">Save Settings</button>
+            <a asp-page="/UserProfile/Index" class="btn-back">Back to Profile</a>
+        </form>
+
     </div>
 
-    <div class="form-group">
-        <input type="submit" value="Save Settings" class="btn btn-primary" />
-        <a asp-page="/UserProfile/Index" class="btn btn-secondary">Back to Profile</a>
-    </div>
-</form>
+</div>
 
 @section Scripts {
-    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
 }
