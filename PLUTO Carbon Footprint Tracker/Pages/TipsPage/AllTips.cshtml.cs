@@ -15,6 +15,7 @@ namespace PLUTO_Carbon_Footprint_Tracker.Pages.TipsPage
             _context = context;
         }
 
+        // Bind the SearchTerm property to allow it to be set from query string parameters on GET requests
         [BindProperty(SupportsGet = true)]
         public string? SearchTerm { get; set; }
 
@@ -25,8 +26,7 @@ namespace PLUTO_Carbon_Footprint_Tracker.Pages.TipsPage
             // Set the SearchTerm property to the incoming searchTerm parameter
             SearchTerm = searchTerm;
             // Start with a query that includes the related ActivityType and filters out FAQs
-            var query = _context.Tips.Include(t => t.ActivityType).Where(t => !t.IsFaq)
-                .AsQueryable();
+            var query = _context.Tips.Include(t => t.ActivityType).Where(t => !t.IsFaq).AsQueryable();
 
             // If a search term is provided, filter the query to include tips where the title,
             // content, or activity type name contains the search term

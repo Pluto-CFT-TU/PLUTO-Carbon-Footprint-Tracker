@@ -24,6 +24,7 @@ namespace PLUTO_Carbon_Footprint_Tracker.Pages.Admin.AdminTips
 
         public async Task<IActionResult> OnGetAsync()
         {
+            // Load the activity types to populate the dropdown list
             ActivityTypeItems = await _context.ActivityTypes.OrderBy(at => at.Name)
                 .Select(at => new SelectListItem
                 {
@@ -36,10 +37,14 @@ namespace PLUTO_Carbon_Footprint_Tracker.Pages.Admin.AdminTips
 
         public async Task<IActionResult> OnPostAsync()
         {
+            // Remove validation for ActivityType since it's a dropdown and will
+            // always have a value (even if it's an empty string)
             ModelState.Remove("Tips.ActivityType");
 
+            // Validate required fields
             if (!ModelState.IsValid)
             {
+                // If validation fails, reload the activity types for the dropdown and return to the page
                 ActivityTypeItems = await _context.ActivityTypes.OrderBy(at => at.Name)
                     .Select(at => new SelectListItem
                     {
@@ -49,7 +54,7 @@ namespace PLUTO_Carbon_Footprint_Tracker.Pages.Admin.AdminTips
 
                 return Page();
             }
-
+            // Save the new tip to the database
             _context.Tips.Add(Tips);
             await _context.SaveChangesAsync();
 

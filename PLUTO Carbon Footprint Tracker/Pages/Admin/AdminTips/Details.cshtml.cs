@@ -28,7 +28,7 @@ namespace PLUTO_Carbon_Footprint_Tracker.Pages.Admin.AdminTips
             {
                 return NotFound();
             }
-
+            // Find the tip with the specified ID, including its related ActivityType
             var tips = await _context.Tips.Include(t => t.ActivityType)
                 .FirstOrDefaultAsync(m => m.Id == id);
 

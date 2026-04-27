@@ -14,10 +14,12 @@ namespace PLUTO_Carbon_Footprint_Tracker.Pages.EmissionsLog
         {
             _context = context;
         }
-
+        // Bind the SearchTerm and SelectedDate properties to
+        // allow them to be set from query string parameters on GET requests
         [BindProperty(SupportsGet = true)]
         public string? SearchTerm { get; set; }
-
+        // Bind the SelectedDate property to allow it to be set from query
+        // string parameters on GET requests
         [BindProperty(SupportsGet = true)]
         public DateTime SelectedDate { get; set; }
 

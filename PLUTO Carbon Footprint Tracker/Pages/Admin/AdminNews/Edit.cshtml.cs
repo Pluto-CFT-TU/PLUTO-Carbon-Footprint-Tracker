@@ -29,6 +29,7 @@ namespace PLUTO_Carbon_Footprint_Tracker.Pages.Admin.AdminNews
                 return NotFound();
             }
 
+            // Retrieve the news article from the database
             var newsArticle = await _context.NewsArticles
                 .FirstOrDefaultAsync(m => m.Id == id);
 
@@ -70,13 +71,16 @@ namespace PLUTO_Carbon_Footprint_Tracker.Pages.Admin.AdminNews
             return RedirectToPage("./Index");
         }
 
+        // Helper method to check if a news article exists in the database
         private bool NewsArticleExists(int id)
         {
             return _context.NewsArticles.Any(e => e.Id == id);
         }
 
+        // Load predefined image options for the dropdown
         private void LoadImageItems()
         {
+            // Predefined list of image options for the dropdown
             ImageItems = new List<SelectListItem>
             {
                 new SelectListItem { Value = "", Text = "-- No image --" },

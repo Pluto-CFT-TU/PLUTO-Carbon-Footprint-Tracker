@@ -28,7 +28,7 @@ namespace PLUTO_Carbon_Footprint_Tracker.Pages.Admin.AdminEmission
             {
                 return NotFound();
             }
-
+            // Load the activity to be edited
             var activity = await _context.Activities
                 .FirstOrDefaultAsync(m => m.Id == id);
 
@@ -39,6 +39,7 @@ namespace PLUTO_Carbon_Footprint_Tracker.Pages.Admin.AdminEmission
 
             Activity = activity;
 
+            // Load activity types for the dropdown
             ActivityTypeItems = await _context.ActivityTypes
                 .OrderBy(at => at.Name)
                 .Select(at => new SelectListItem
@@ -53,9 +54,13 @@ namespace PLUTO_Carbon_Footprint_Tracker.Pages.Admin.AdminEmission
 
         public async Task<IActionResult> OnPostAsync()
         {
+            // Remove validation for ActivityType and EmissionEntries
+            // since they are not directly bound
             ModelState.Remove("Activity.ActivityType");
             ModelState.Remove("Activity.EmissionEntries");
 
+            // Validate the model state. If it's not valid, repopulate
+            // the ActivityTypeItems list and
             if (!ModelState.IsValid)
             {
                 ActivityTypeItems = await _context.ActivityTypes

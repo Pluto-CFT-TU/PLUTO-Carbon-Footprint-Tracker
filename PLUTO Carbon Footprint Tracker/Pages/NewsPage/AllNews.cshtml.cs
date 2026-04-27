@@ -13,7 +13,7 @@ namespace PLUTO_Carbon_Footprint_Tracker.Pages.NewsPage
         {
             _context = context;
         }
-
+        // Bind the SearchTerm property to allow it to be set from query string parameters on GET requests
         [BindProperty(SupportsGet = true)]
         public string? SearchTerm { get; set; }
 

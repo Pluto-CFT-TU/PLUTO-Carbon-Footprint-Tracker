@@ -28,7 +28,7 @@ namespace PLUTO_Carbon_Footprint_Tracker.Pages.Admin.AdminEmission
             {
                 return NotFound();
             }
-
+            // Include the related ActivityType data when retrieving the Activity details
             var activity = await _context.Activities.Include(a => a.ActivityType)
                 .FirstOrDefaultAsync(m => m.Id == id);
             if (activity == null)
