@@ -88,7 +88,6 @@
                 <div class="navbar-collapse collapse d-sm-inline-flex justify-content-between">
                     @if (User.Identity?.IsAuthenticated == true)
                     {
-                        ?? "User";
                         @if (User.IsInRole("Admin"))
                         {
                             <ul class="navbar-nav flex-grow-1">
