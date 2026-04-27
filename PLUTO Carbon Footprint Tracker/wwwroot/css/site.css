@@ -14,14 +14,12 @@ body {
     margin-bottom: 60px;
 }
 
-/* Logo */
 .nav-logo {
     max-width: 70px;
     height: 50px;
     object-fit: contain;
 }
 
-/* Bootstrap focus styling */
 .btn:focus,
 .btn:active:focus,
 .btn-link.nav-link:focus,
@@ -30,12 +28,10 @@ body {
     box-shadow: 0 0 0 0.1rem white, 0 0 0 0.25rem #258cfb;
 }
 
-/* Bigger text support */
 body * {
     font-size: inherit;
 }
 
-/* Keep headings larger than normal text */
 h1 {
     font-size: 2rem;
 }
@@ -49,12 +45,10 @@ h4 {
     font-size: 1.3rem;
 }
 
-/* Footer */
 .site-footer {
     background: #ffffff;
 }
 
-/* High contrast mode */
 .high-contrast {
     background: #000 !important;
     color: #fff !important;
@@ -144,7 +138,6 @@ h4 {
         color: #ddd !important;
     }
 
-/* Colour blind modes - MVP visual filters */
 .protanopia-mode {
     filter: hue-rotate(20deg) saturate(0.8);
 }
