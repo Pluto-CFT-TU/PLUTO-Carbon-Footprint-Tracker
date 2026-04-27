@@ -6,7 +6,7 @@ using PLUTO_Carbon_Footprint_Tracker.Data;
 using PLUTO_Carbon_Footprint_Tracker.Services;
 
 namespace PLUTO_Carbon_Footprint_Tracker.Pages.EmissionsLog
-{ 
+{
     public class EditModel : PageModel
     {
         private readonly CFTDBContext _context;
