@@ -1,0 +1,39 @@
+﻿﻿@page "{id:int?}"
+@model PLUTO_Carbon_Footprint_Tracker.Pages.EmissionsLog.DeleteModel
+
+@{
+    ViewData["Title"] = "Delete Emission Entry";
+}
+
+<h1>Delete</h1>
+
+<h3>Are you sure you want to delete this emission entry?</h3>
+
+<div>
+    <h4>Emission Entry</h4>
+    <hr />
+
+    <dl class="row">
+        <dt class="col-sm-2">Activity</dt>
+        <dd class="col-sm-10">@Model.EmissionEntry.Activity.Name</dd>
+
+        <dt class="col-sm-2">Category</dt>
+        <dd class="col-sm-10">@Model.EmissionEntry.Activity.ActivityType.Name</dd>
+
+        <dt class="col-sm-2">Quantity</dt>
+        <dd class="col-sm-10">@Model.EmissionEntry.Quantity @Model.EmissionEntry.Activity.Unit</dd>
+
+        <dt class="col-sm-2">Carbon</dt>
+        <dd class="col-sm-10">@Model.EmissionEntry.CarbonKg.ToString("0.###") kg</dd>
+
+        <dt class="col-sm-2">Date</dt>
+        <dd class="col-sm-10">@Model.EmissionEntry.EntryDate.ToString("dd MMM yyyy")</dd>
+    </dl>
+
+    <form method="post">
+        <input type="hidden" asp-for="EmissionEntry.Id" />
+        <input type="submit" value="Delete" class="btn btn-danger" />
+        |
+        <a asp-page="./Index">Back to List</a>
+    </form>
+</div>
