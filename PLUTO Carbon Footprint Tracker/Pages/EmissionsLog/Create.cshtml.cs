@@ -37,6 +37,7 @@ namespace PLUTO_Carbon_Footprint_Tracker.Pages.EmissionsLog
                 return NotFound();
             }
 
+            // Load the activity with its type to display relevant information on the page
             Activity = await _context.Activities.Include(a => a.ActivityType)
                 .FirstOrDefaultAsync(a => a.Id == activityId && a.IsActive);
 
@@ -44,7 +45,7 @@ namespace PLUTO_Carbon_Footprint_Tracker.Pages.EmissionsLog
             {
                 return NotFound();
             }
-
+            // Set the ActivityId for the form and default the selected date to today if not provided
             ActivityId = Activity.Id;
             SelectedDate = (selectedDate ?? DateTime.UtcNow.Date).Date;
 
@@ -53,6 +54,7 @@ namespace PLUTO_Carbon_Footprint_Tracker.Pages.EmissionsLog
 
         public async Task<IActionResult> OnPostAsync()
         {
+            // Validate the activity exists and is active
             Activity = await _context.Activities.Include(a => a.ActivityType)
                 .FirstOrDefaultAsync(a => a.Id == ActivityId && a.IsActive);
 
@@ -60,21 +62,24 @@ namespace PLUTO_Carbon_Footprint_Tracker.Pages.EmissionsLog
             {
                 return NotFound();
             }
-
+            // Validate the quantity the user is trying to log is greater than 0
             if (Quantity <= 0)
             {
                 ModelState.AddModelError(nameof(Quantity), "Quantity must be greater than 0.");
                 return Page();
             }
 
+            // Ensure the user exists in the database, if not create a new user record based on their Auth0 information
             var user = await _syncUserDataService.EnsureUserExistsAsync(User);
             if (user == null)
             {
                 return NotFound();
             }
 
+            // Calculate the carbon emissions based on the quantity and the activity's emission factor
             CarbonKg = Quantity * Activity.EmissionFactor;
 
+            // Create a new emission entry record and save it to the database
             var entry = new EmissionEntry
             {
                 UserId = user.Id,
@@ -88,6 +93,9 @@ namespace PLUTO_Carbon_Footprint_Tracker.Pages.EmissionsLog
             _context.EmissionEntries.Add(entry);
             await _context.SaveChangesAsync();
 
+            // After saving it redirects back to the Index page of the Emission Log and uses the date of the saved entry
+            // to redirect back to the correct date in the log so the user can continue viewing their entries from that date
+            // without having to manually navigate back to it
             return RedirectToPage("./Index", new { selectedDate = SelectedDate.ToString("yyyy-MM-dd") });
         }
     }

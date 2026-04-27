@@ -1,5 +1,6 @@
 ﻿@page
 @model PLUTO_Carbon_Footprint_Tracker.Pages.EmissionsLog.EditModel
+
 @{
     ViewData["Title"] = "Edit Emission Entry";
 }
@@ -18,10 +19,18 @@
             <input type="hidden" asp-for="EmissionEntry.UserId" />
             <input type="hidden" asp-for="EmissionEntry.ActivityId" />
             <input type="hidden" asp-for="EmissionEntry.CreatedAt" />
+            <input type="hidden" asp-for="EmissionEntry.EntryDate" />
 
-            <div class="form-group">
-                <label class="control-label">Activity</label>
-                <input class="form-control" value="@Model.ActivityName" readonly />
+            <div class="mb-3">
+                <p><strong>Activity:</strong> @Model.ActivityName</p>
+            </div>
+
+            <div class="mb-3">
+                <p><strong>Emission Factor:</strong> @Model.EmissionFactor.ToString() kg</p>
+            </div>
+
+            <div class="mb-3">
+                <p><strong>Current Emission Amount:</strong> @Model.EmissionAmount.ToString() kg</p>
             </div>
 
             <div class="form-group">
@@ -31,12 +40,6 @@
                 <small class="form-text text-muted">
                     Unit: @Model.ActivityUnit
                 </small>
-            </div>
-
-            <div class="form-group">
-                <label asp-for="EmissionEntry.EntryDate" class="control-label">Date</label>
-                <input asp-for="EmissionEntry.EntryDate" type="date" class="form-control" />
-                <span asp-validation-for="EmissionEntry.EntryDate" class="text-danger"></span>
             </div>
 
             <div class="form-group mt-3">
