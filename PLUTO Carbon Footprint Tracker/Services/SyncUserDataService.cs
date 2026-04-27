@@ -39,10 +39,10 @@ namespace PLUTO_Carbon_Footprint_Tracker.Services
                 principal.Claims.FirstOrDefault(c => c.Type == "email")?.Value ??
                 string.Empty;
 
-            var username = principal.Claims.FirstOrDefault(c => c.Type == "username")?.Value ??
-                principal.Claims.FirstOrDefault(c => c.Type == "nickname")?.Value ??
-                principal.Claims.FirstOrDefault(c => c.Type == "name")?.Value ??
-                (!string.IsNullOrWhiteSpace(email) ? email.Split('@')[0] : "User");
+            var username = principal.Claims.FirstOrDefault(c => c.Type == "nickname")?.Value
+                ?? principal.Claims.FirstOrDefault(c => c.Type == "name")?.Value
+                ?? principal.Claims.FirstOrDefault(c => c.Type == "email")?.Value?.Split('@')[0]
+                ?? "User";
 
             _logger.LogInformation("Auth0UserId: {Auth0UserId}", auth0UserId);
             _logger.LogInformation("Email: {Email}", email);
