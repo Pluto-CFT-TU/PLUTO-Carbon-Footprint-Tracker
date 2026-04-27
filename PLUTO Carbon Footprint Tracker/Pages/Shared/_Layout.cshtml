@@ -22,10 +22,9 @@
                 <div class="navbar-collapse collapse d-sm-inline-flex justify-content-between">
                     @if (User.Identity.IsAuthenticated)
                     {
-                        var username = User.Claims.FirstOrDefault(c => c.Type == "username")?.Value
-                        ?? User.Claims.FirstOrDefault(c => c.Type == "nickname")?.Value
+                        var username = User.Claims.FirstOrDefault(c => c.Type == "nickname")?.Value
                         ?? User.Claims.FirstOrDefault(c => c.Type == "name")?.Value
-                        ?? User.Claims.FirstOrDefault(c => c.Type == "email")?.Value
+                        ?? User.Claims.FirstOrDefault(c => c.Type == "email")?.Value?.Split('@')[0]
                         ?? "User";
                         @if (User.IsInRole("Admin"))
                         {
