@@ -19,6 +19,9 @@ namespace PLUTO_Carbon_Footprint_Tracker.Pages.EmissionsLog
 
         public DateTime SelectedDate { get; set; }
         public decimal TotalCarbonKg { get; set; }
+        public decimal AveragePersonDailyCarbonKg { get; set; } = 26m;
+        public decimal DifferenceFromAverageKg { get; set; }
+        public bool IsBelowAverage { get; set; }
         public Dictionary<string, List<EmissionEntry>> GroupedEntries { get; set; } = new();
 
         public async Task<IActionResult> OnGetAsync(DateTime? selectedDate)
@@ -42,6 +45,8 @@ namespace PLUTO_Carbon_Footprint_Tracker.Pages.EmissionsLog
 
             // Calculate the total carbon emissions for the selected date by summing the CarbonKg values of all entries
             TotalCarbonKg = entries.Sum(e => e.CarbonKg);
+            DifferenceFromAverageKg = AveragePersonDailyCarbonKg - TotalCarbonKg;
+            IsBelowAverage = TotalCarbonKg < AveragePersonDailyCarbonKg;
 
             // Group the entries by their activity type and convert the result into a dictionary where the key is
             // the activity type name and the value is a list of emission entries for that activity type

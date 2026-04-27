@@ -5,66 +5,231 @@
     ViewData["Title"] = "Emission Log";
 }
 
-<h1>Emission Log</h1>
+<style>
+    body {
+        background: #eef5ee;
+        font-family: 'Segoe UI', sans-serif;
+    }
 
-<form method="get" class="mb-3">
-    <label for="selectedDate" class="form-label">Date</label>
-    <input type="date" id="selectedDate" name="selectedDate"
-           value="@Model.SelectedDate.ToString("yyyy-MM-dd")" class="form-control" />
-    <button type="submit" class="btn btn-secondary mt-2">Load</button>
-</form>
+    .header {
+        background: #4caf50;
+        color: white;
+        padding: 14px;
+        text-align: center;
+        font-weight: 600;
+        position: relative;
+    }
 
-<div class="card mb-3">
-    <div class="card-body">
-        <h4>Total for @Model.SelectedDate.ToString("dd MMM yyyy")</h4>
-        <p><strong>@Model.TotalCarbonKg.ToString("0.###") kg</strong></p>
+        .header .left {
+            position: absolute;
+            left: 15px;
+        }
+
+        .header .right {
+            position: absolute;
+            right: 15px;
+        }
+
+    .icon-btn {
+        text-decoration: none;
+        color: white;
+        font-size: 18px;
+        padding: 4px;
+        border-radius: 6px;
+    }
+
+        .icon-btn:hover {
+            background: rgba(255,255,255,0.2);
+            color: white;
+        }
+    .content {
+        padding: 12px;
+    }
+
+    .summary-card {
+        background: white;
+        border-radius: 12px;
+        padding: 14px;
+        margin-bottom: 12px;
+        box-shadow: 0 2px 6px rgba(0,0,0,0.05);
+        text-align: center;
+    }
+
+        .summary-card h2 {
+            margin: 0;
+            color: #2e7d32;
+            font-size: 28px;
+        }
+
+        .summary-card p {
+            margin: 4px 0 0;
+            font-size: 13px;
+            color: #555;
+        }
+
+    .date-card {
+        background: #dff0d8;
+        border-radius: 12px;
+        padding: 12px;
+        margin-bottom: 12px;
+    }
+
+    .section-title {
+        font-size: 13px;
+        margin: 12px 0 6px;
+        color: #1b3a1b;
+        border-bottom: 1px solid #c8e6c9;
+        padding-bottom: 3px;
+    }
+
+    .entry-item {
+        background: #efe6dc;
+        padding: 12px;
+        border-radius: 10px;
+        margin-bottom: 8px;
+        font-size: 14px;
+    }
+
+    .entry-top {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        color: #1b3a1b;
+        font-weight: 600;
+    }
+
+    .entry-details {
+        margin-top: 5px;
+        font-size: 13px;
+        color: #555;
+    }
+
+    .entry-actions {
+        margin-top: 8px;
+    }
+
+    .empty-text {
+        font-size: 13px;
+        color: #666;
+        margin-top: 8px;
+    }
+
+    .footer {
+        background: #e8f5e9;
+        padding: 10px 0;
+        display: flex;
+        justify-content: space-around;
+        border-top: 1px solid #c8e6c9;
+    }
+
+        .footer div {
+            text-align: center;
+            font-size: 12px;
+            color: #2e7d32;
+        }
+</style>
+
+<div class="app">
+
+    <div class="header">
+        <a asp-page="/SettingsPage/Index" class="left icon-btn">⚙</a>
+        Emission Log
+        <a asp-page="/UserProfile/Index" class="right icon-btn">👤</a>
     </div>
-</div>
 
-<p>
-    <a asp-page="./Search" asp-route-selectedDate="@Model.SelectedDate.ToString("yyyy-MM-dd")"
-       class="btn btn-success">Add New</a>
-</p>
+    <div class="content">
 
-@if (Model.GroupedEntries.Any())
-{
-    @foreach (var group in Model.GroupedEntries)
-    {
-        <h3>@group.Key</h3>
+        <div class="summary-card">
+            <h2>@Model.TotalCarbonKg.ToString("0.###") kg</h2>
+            <p>Total CO₂ for @Model.SelectedDate.ToString("dd MMM yyyy")</p>
+        </div>
+        <div class="summary-card">
+            <h2>@Model.AveragePersonDailyCarbonKg.ToString("0.###") kg</h2>
+            <p>Estimated average daily CO₂ per person</p>
 
-        <table class="table">
-            <thead>
-                <tr>
-                    <th>Activity</th>
-                    <th>Quantity</th>
-                    <th>Carbon</th>
-                </tr>
-            </thead>
-            <tbody>
+            @if (Model.IsBelowAverage)
+            {
+                <p>
+                    You are <strong>@Model.DifferenceFromAverageKg.ToString("0.###") kg below</strong>
+                    the daily average.
+                </p>
+            }
+            else
+            {
+                <p>
+                    You are <strong>@Math.Abs(Model.DifferenceFromAverageKg).ToString("0.###") kg above</strong>
+                    the daily average.
+                </p>
+            }
+        </div>
+        <div class="date-card">
+            <form method="get">
+                <label for="selectedDate" class="form-label">Select Date</label>
+                <input type="date"
+                       id="selectedDate"
+                       name="selectedDate"
+                       value="@Model.SelectedDate.ToString("yyyy-MM-dd")"
+                       class="form-control" />
+
+                <div class="mt-2">
+                    <button type="submit" class="btn btn-primary btn-sm">Load</button>
+                    <a asp-page="./Search"
+                       asp-route-selectedDate="@Model.SelectedDate.ToString("yyyy-MM-dd")"
+                       class="btn btn-success btn-sm">
+                        Add Activity
+                    </a>
+                </div>
+            </form>
+        </div>
+
+        @if (Model.GroupedEntries.Any())
+        {
+            @foreach (var group in Model.GroupedEntries)
+            {
+                <div class="section-title">@group.Key</div>
+
                 @foreach (var entry in group.Value)
                 {
-                    <tr>
-                        <td>@entry.Activity.Name</td>
-                        <td>@entry.Quantity @entry.Activity.Unit</td>
-                        <td>@entry.CarbonKg.ToString("0.###") kg</td>
-                        <td>
-                            <a asp-page="./Edit" asp-route-id="@entry.Id"
-                               asp-route-selectedDate="@Model.SelectedDate.ToString("yyyy-MM-dd")"
-                               class="btn btn-sm btn-primary">Edit</a>
-                            <a asp-page="./Details" asp-route-id="@entry.Id"
-                               asp-route-selectedDate="@Model.SelectedDate.ToString("yyyy-MM-dd")"
-                               class="btn btn-sm btn-info">View</a>
-                            <a asp-page="./Delete" asp-route-id="@entry.Id"
-                               asp-route-selectedDate="@Model.SelectedDate.ToString("yyyy-MM-dd")"
-                               class="btn btn-sm btn-danger">Delete</a>
-                        </td>
-                    </tr>
+                    <div class="entry-item">
+
+                        <div class="entry-top">
+                            <span>@entry.Activity.Name</span>
+                            <span>@entry.CarbonKg.ToString("0.###") kg</span>
+                        </div>
+
+                        <div class="entry-details">
+                            Quantity: @entry.Quantity @entry.Activity.Unit
+                        </div>
+
+                        <div class="entry-actions">
+                            <a asp-page="./Edit"
+                               asp-route-id="@entry.Id"
+                               class="btn btn-primary btn-sm">
+                                Edit
+                            </a>
+
+                            <a asp-page="./Delete"
+                               asp-route-id="@entry.Id"
+                               class="btn btn-danger btn-sm">
+                                Delete
+                            </a>
+                        </div>
+
+                    </div>
                 }
-            </tbody>
-        </table>
-    }
-}
-else
-{
-    <p>No entries found for this date.</p>
-}
+            }
+        }
+        else
+        {
+            <p class="empty-text">No emissions logged for this date.</p>
+
+            <a asp-page="./Search"
+               asp-route-selectedDate="@Model.SelectedDate.ToString("yyyy-MM-dd")"
+               class="btn btn-success btn-sm">
+                Add your first activity
+            </a>
+        }
+
+    </div>
+
+</div>

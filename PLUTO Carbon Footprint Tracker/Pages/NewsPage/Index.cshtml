@@ -11,7 +11,6 @@
         font-family: 'Segoe UI', sans-serif;
     }
 
-    /* HEADER */
     .header {
         background: #4caf50;
         color: white;
@@ -21,24 +20,33 @@
         position: relative;
     }
 
-        .header .icon-left {
+        .header .left {
             position: absolute;
             left: 15px;
-            top: 14px;
         }
 
-        .header .icon-right {
+        .header .right {
             position: absolute;
             right: 15px;
-            top: 14px;
         }
 
-    /* CONTENT */
+    .icon-btn {
+        text-decoration: none;
+        color: white;
+        font-size: 18px;
+        padding: 4px;
+        border-radius: 6px;
+    }
+
+        .icon-btn:hover {
+            background: rgba(255,255,255,0.2);
+            color: white;
+        }
+
     .content {
         padding: 12px;
     }
 
-    /* FEATURED */
     .featured {
         background: #dff0d8;
         border-radius: 12px;
@@ -58,7 +66,6 @@
         text-align: center;
     }
 
-    /* LIST ITEMS */
     .news-item {
         background: #fff;
         border-radius: 10px;
@@ -84,20 +91,32 @@
         margin-left: 10px;
         object-fit: cover;
     }
+
+    .footer {
+        background: #e8f5e9;
+        padding: 10px 0;
+        display: flex;
+        justify-content: space-around;
+        border-top: 1px solid #c8e6c9;
+    }
+
+        .footer div {
+            text-align: center;
+            font-size: 12px;
+            color: #2e7d32;
+        }
 </style>
 
 <div class="app">
 
-    <!-- HEADER -->
     <div class="header">
-        <span class="icon-left">⚙</span>
+        <a asp-page="/SettingsPage/Index" class="left icon-btn">⚙</a>
         News
-        <span class="icon-right">👤</span>
+        <a asp-page="/UserProfile/Index" class="right icon-btn">👤</a>
     </div>
 
     <div class="content">
 
-        <!-- FEATURED ARTICLE -->
         @if (Model.CurrentNews.Any())
         {
             var featured = Model.CurrentNews.First();
@@ -114,7 +133,6 @@
                 </div>
             </a>
 
-            <!-- LIST -->
             @foreach (var article in Model.CurrentNews.Skip(1))
             {
                 <a asp-page="./Details" asp-route-id="@article.Id" style="text-decoration:none;">
@@ -147,7 +165,6 @@
         </div>
         @if (Model.MoreNews.Any())
         {
-            <!-- LIST -->
             @foreach (var article in Model.MoreNews)
             {
                 <a asp-page="./Details" asp-route-id="@article.Id" style="text-decoration:none;">
