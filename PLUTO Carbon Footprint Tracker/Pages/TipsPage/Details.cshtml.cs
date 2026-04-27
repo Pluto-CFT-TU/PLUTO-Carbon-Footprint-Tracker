@@ -22,7 +22,7 @@ namespace PLUTO_Carbon_Footprint_Tracker.Pages.TipsPage
             {
                 return NotFound();
             }
-
+            // Retrieve the tip with the specified ID from the database
             var tips = await _context.Tips.FirstOrDefaultAsync(m => m.Id == id);
             if (tips == null)
             {
