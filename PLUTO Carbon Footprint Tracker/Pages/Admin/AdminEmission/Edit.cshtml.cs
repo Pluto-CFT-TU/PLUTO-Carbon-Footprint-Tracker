@@ -59,6 +59,20 @@ namespace PLUTO_Carbon_Footprint_Tracker.Pages.Admin.AdminEmission
             ModelState.Remove("Activity.ActivityType");
             ModelState.Remove("Activity.EmissionEntries");
 
+            if (Activity == null)
+            {
+                return NotFound();
+            }
+            if (Activity.ActivityTypeId == 0)
+            {
+                ModelState.AddModelError("Activity.ActivityTypeId", "Please select an activity type.");
+            }
+
+            // Validate that the EmissionFactor is greater than zero. If it's not, add a model error to the ModelState
+            if (Activity.EmissionFactor <= 0)
+            {
+                ModelState.AddModelError("Activity.EmissionFactor", "Quantity must be greater than zero.");
+            }
             // Validate the model state. If it's not valid, repopulate
             // the ActivityTypeItems list and
             if (!ModelState.IsValid)
