@@ -11,16 +11,6 @@
         font-family: 'Segoe UI', sans-serif;
     }
 
-    .app {
-        max-width: 420px;
-        margin: auto;
-        background: #f6fbf6;
-        border-radius: 25px;
-        overflow: hidden;
-        box-shadow: 0 10px 25px rgba(0,0,0,0.1);
-    }
-
-    /* HEADER */
     .header {
         background: #4caf50;
         color: white;
@@ -45,7 +35,6 @@
             top: 14px;
         }
 
-    /* CONTENT */
     .content {
         padding: 14px;
     }
@@ -63,7 +52,6 @@
         margin-bottom: 12px;
     }
 
-    /* MEDIA */
     .media-box {
         background: #ddd;
         border-radius: 12px;
@@ -73,11 +61,10 @@
 
         .media-box iframe {
             width: 100%;
-            height: 180px;
+            height: 500px;
             border: none;
         }
 
-    /* CONTENT BOX */
     .text-box {
         background: #ffffff;
         padding: 12px;
@@ -88,7 +75,6 @@
         box-shadow: 0 2px 6px rgba(0,0,0,0.05);
     }
 
-    /* FOOTER */
     .footer {
         background: #e8f5e9;
         padding: 10px 0;
@@ -107,21 +93,17 @@
 
 <div class="app">
 
-    <!-- HEADER -->
     <div class="header">
         <a asp-page="./Index" class="back">←</a>
         Tips
-        <span class="profile">👤</span>
     </div>
 
     <div class="content">
 
-        <!-- TITLE -->
         <div class="title">
             @Model.Tip.Title
         </div>
 
-        <!-- CATEGORY -->
         @if (Model.Tip.ActivityType != null)
         {
             <div class="category">
@@ -129,7 +111,6 @@
             </div>
         }
 
-        <!-- VIDEO -->
         @if (!string.IsNullOrWhiteSpace(Model.Tip.VideoUrl))
         {
             <div class="media-box">
@@ -137,19 +118,10 @@
             </div>
         }
 
-        <!-- TEXT -->
         <div class="text-box">
             @Model.Tip.Content
         </div>
 
-    </div>
-
-    <!-- FOOTER -->
-    <div class="footer">
-        <div>News</div>
-        <div>Home</div>
-        <div>Tips</div>
-        <div>Profile</div>
     </div>
 
 </div>

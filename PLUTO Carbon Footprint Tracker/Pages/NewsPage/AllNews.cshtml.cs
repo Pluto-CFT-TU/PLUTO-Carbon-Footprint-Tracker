@@ -1,3 +1,4 @@
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.EntityFrameworkCore;
@@ -5,6 +6,7 @@ using PLUTO_Carbon_Footprint_Tracker.Data;
 
 namespace PLUTO_Carbon_Footprint_Tracker.Pages.NewsPage
 {
+    [Authorize]
     public class AllNewsModel : PageModel
     {
         private readonly CFTDBContext _context;

@@ -1,10 +1,12 @@
-﻿using Microsoft.AspNetCore.Mvc.RazorPages;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.EntityFrameworkCore;
 using PLUTO_Carbon_Footprint_Tracker.Data;
 using PLUTO_Carbon_Footprint_Tracker.Services;
 
 namespace PLUTO_Carbon_Footprint_Tracker.Pages.TipsPage
 {
+    [Authorize]
     public class IndexModel : PageModel
     {
         private readonly CFTDBContext _context;
@@ -27,7 +29,7 @@ namespace PLUTO_Carbon_Footprint_Tracker.Pages.TipsPage
             var user = await _syncUserDataService.EnsureUserExistsAsync(User);
             if (user == null)
             {
-                return;
+                return ;
             }
 
             // Load the user's emission entries along with their activities and activity types

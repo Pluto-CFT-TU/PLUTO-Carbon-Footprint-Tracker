@@ -104,7 +104,10 @@
     <div class="content">
 
         <div class="section-title">Personalised Tips</div>
-
+        @if (!Model.RecommendedTips.Any())
+        {
+            <div class="empty-text">No personalised tips available. Please log more activities to get personalised advice</div>
+		}
         @foreach (var tip in Model.RecommendedTips)
         {
             <div class="list-item">

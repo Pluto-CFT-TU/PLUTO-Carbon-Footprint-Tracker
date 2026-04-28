@@ -1,3 +1,4 @@
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.EntityFrameworkCore;
 using PLUTO_Carbon_Footprint_Tracker.Data;
@@ -6,6 +7,7 @@ using PLUTO_Carbon_Footprint_Tracker.ViewModels;
 
 namespace PLUTO_Carbon_Footprint_Tracker.Pages.UserProfile
 {
+    [Authorize]
     public class IndexModel : PageModel
     {
         private readonly CFTDBContext _context;

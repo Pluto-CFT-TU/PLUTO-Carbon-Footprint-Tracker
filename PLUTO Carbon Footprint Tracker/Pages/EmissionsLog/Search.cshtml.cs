@@ -1,3 +1,4 @@
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.EntityFrameworkCore;
@@ -6,6 +7,7 @@ using PLUTO_Carbon_Footprint_Tracker.ViewModels;
 
 namespace PLUTO_Carbon_Footprint_Tracker.Pages.EmissionsLog
 {
+    [Authorize]
     public class SearchModel : PageModel
     {
         private readonly CFTDBContext _context;
