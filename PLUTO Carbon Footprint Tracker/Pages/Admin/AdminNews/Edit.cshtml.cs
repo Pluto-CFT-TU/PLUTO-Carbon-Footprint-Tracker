@@ -20,6 +20,8 @@ namespace PLUTO_Carbon_Footprint_Tracker.Pages.Admin.AdminNews
         [BindProperty]
         public NewsArticle NewsArticle { get; set; } = default!;
 
+        public List<string> ImageOptions { get; set; }
+
         public List<SelectListItem> ImageItems { get; set; } = [];
 
         public async Task<IActionResult> OnGetAsync(int? id)
@@ -39,7 +41,7 @@ namespace PLUTO_Carbon_Footprint_Tracker.Pages.Admin.AdminNews
             }
 
             NewsArticle = newsArticle;
-            LoadImageItems();
+            LoadImageItemsAsync();
 
             return Page();
         }
@@ -48,7 +50,7 @@ namespace PLUTO_Carbon_Footprint_Tracker.Pages.Admin.AdminNews
         {
             if (!ModelState.IsValid)
             {
-                LoadImageItems();
+                LoadImageItemsAsync();
                 return Page();
             }
 
@@ -78,19 +80,14 @@ namespace PLUTO_Carbon_Footprint_Tracker.Pages.Admin.AdminNews
         }
 
         // Load predefined image options for the dropdown
-        private void LoadImageItems()
+        private async Task LoadImageItemsAsync()
         {
-            // Predefined list of image options for the dropdown
-            ImageItems = new List<SelectListItem>
-            {
-                new SelectListItem { Value = "", Text = "-- No image --" },
-                new SelectListItem { Value = "/Images/News/Actnow.jpg", Text = "Act Now" },
-                new SelectListItem { Value = "/Images/News/Deforest.jpg", Text = "Deforestation" },
-                new SelectListItem { Value = "/Images/News/Fire.jpg", Text = "Fire" },
-                new SelectListItem { Value = "/Images/News/grassywindmills.jpg", Text = "Windmills" },
-                new SelectListItem { Value = "/Images/News/ice.jpg", Text = "Ice Caps" },
-                new SelectListItem { Value = "/Images/News/Nofuture.jpg", Text = "No Future" }
-            };
+            ImageOptions = await _context.NewsArticles
+                .Where(n => !string.IsNullOrEmpty(n.ImageUrl))
+                .Select(n => n.ImageUrl)
+                .Distinct()
+                .ToListAsync();
+            ImageItems = ImageOptions.Select(url => new SelectListItem { Value = url, Text = url }).ToList();
         }
     }
 }

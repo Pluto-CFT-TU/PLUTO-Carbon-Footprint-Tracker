@@ -38,7 +38,9 @@
 
             <div class="form-group">
                 <label asp-for="NewsArticle.ImageUrl" class="control-label">News Image</label>
-                <select asp-for="NewsArticle.ImageUrl" asp-items="Model.ImageItems" class="form-control"></select>
+                <select asp-for="NewsArticle.ImageUrl" asp-items="Model.ImageItems" class="form-control">
+					<option value="">-- Select --</option>
+                </select>
                 <span asp-validation-for="NewsArticle.ImageUrl" class="text-danger"></span>
             </div>
 
