@@ -64,6 +64,12 @@ namespace PLUTO_Carbon_Footprint_Tracker.Pages.EmissionsLog
                 return NotFound();
             }
 
+            if (EmissionEntry.Quantity <= 0)
+            {
+                ModelState.AddModelError("EmissionEntry.Quantity", "Quantity must be greater than 0.");
+                return Page();
+            }
+
             // Loads the existing entry with the related activity to ensure it exists and
             // to allow updates to be made to the correct entry
             var existingEntry = await _context.EmissionEntries.Include(e => e.Activity)
