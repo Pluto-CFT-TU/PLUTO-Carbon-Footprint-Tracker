@@ -96,7 +96,7 @@ Admin users can manage:
 - Settings  
 
 ### Admin Access
-- Username: admin  
+- Username: Admin  
 - Email: admin@sample.com  
 - Password: Testdata1+  
 
